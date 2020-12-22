@@ -1,0 +1,29 @@
+@import '../../sass/custom';
+
+.message {
+    border-radius: 10px;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 0.5rem;
+    padding-left: 2.25rem;
+    padding-right: 2.25rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.message:hover {
+    background-color: $dark-accent;
+}
+
+p {
+    margin: 0;
+    margin-bottom: 0.2rem;
+}
+
+h5 {
+    word-break: break-all !important;
+}
+
+.name {
+    color: $theme;
+}

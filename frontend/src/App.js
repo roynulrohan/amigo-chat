@@ -1,7 +1,14 @@
-import './App.scss';
+import './sass/App.scss';
+import Main from './components/main';
+import SideBar from './components/sidebar/sidebar';
 
 function App() {
-    return <div>Hello World</div>;
+    return (
+        <div>
+            <SideBar />
+            <Main />
+        </div>
+    );
 }
 
 export default App;

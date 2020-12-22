@@ -1,0 +1,15 @@
+@import './custom';
+
+* {
+    font-family: 'Consolas', sans-serif;
+}
+
+body {
+    background-color: $dark;
+    color: white;
+}
+
+.main {
+    height: 100vh !important;
+    margin-left: $sidebar-width;
+}
