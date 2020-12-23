@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Langar&display=swap');
 @import '../custom';
 
 .sidebar {
@@ -12,12 +11,9 @@
     overflow: hidden;
 
     .header {
+        display: flex;
+        justify-content: center;
         min-height: 7% !important;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-template-rows: 1fr;
-        gap: 0px 0px;
-        grid-template-areas: '. title notifications';
     }
 
     .footer {
@@ -26,7 +22,6 @@
     }
 
     .title {
-        grid-area: title;
         color: $theme;
         font-family: 'Langar', cursive;
     }

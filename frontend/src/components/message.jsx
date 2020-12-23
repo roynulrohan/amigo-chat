@@ -17,7 +17,7 @@ const Message = ({ name, content, isMe, hideTitle }) => {
                     <span className='text-info'>You</span>
                 </small>
             )}
-            <h4 className='m-0'>{content}</h4>
+            <h5 className='m-0'>{content}</h5>
         </div>
     ) : (
         <div className='message d-flex flex-column'>
@@ -29,7 +29,7 @@ const Message = ({ name, content, isMe, hideTitle }) => {
                     <span className='date'>{' - ' + getDate(new Date())}</span>
                 </small>
             )}
-            <h4 className='m-0'>{content}</h4>
+            <h5 className='m-0'>{content}</h5>
         </div>
     );
 };

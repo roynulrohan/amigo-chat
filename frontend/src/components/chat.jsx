@@ -9,13 +9,16 @@ const Chat = () => {
     ]);
     const [chatInput, setChatInput] = useState('');
 
-    const messageSend = () => {
+    const messageSend = (e) => {
+        e.preventDefault();
         if (chatInput) {
             setMessages([
                 { name: 'User', content: chatInput, isMe: true },
                 ...messages,
             ]);
         }
+
+        setChatInput('');
     };
 
     return (
@@ -55,27 +58,25 @@ const Chat = () => {
                     })}
             </div>
             <div className='input d-flex justify-content-center align-items-center w-100 p-3'>
-                <div className='input-group d-flex justify-content-center align-items-center rounded-pill bg-dark-accent w-100 h-100 px-4 mx-4'>
+                <form
+                    className='input-group d-flex justify-content-center align-items-center rounded-pill bg-dark-accent w-100 h-100 px-4 mx-4'
+                    onSubmit={messageSend}>
                     <input
                         type='text'
                         class='form-control'
                         placeholder='Enter your message'
                         aria-label='Message'
-                        aria-describedby='basic-addon2'
+                        value={chatInput}
                         onChange={(ev) => {
                             setChatInput(ev.target.value);
                         }}
                     />
                     <div class='input-group-append mx-2'>
-                        <button
-                            class='btn btn-info'
-                            onClick={() => {
-                                messageSend();
-                            }}>
+                        <button type='submit' class='btn btn-info'>
                             Send
                         </button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     );

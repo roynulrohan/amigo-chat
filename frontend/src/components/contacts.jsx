@@ -1,6 +1,5 @@
 import React from 'react';
 import '../sass/components/_contacts.scss';
-import { getDate } from '../utils/DateFormat';
 
 const Contacts = () => {
     return (
