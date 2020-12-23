@@ -12,14 +12,16 @@
 
     .header {
         grid-area: header;
+        box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.3);
     }
+
     .conversation {
         grid-area: conversation;
-
         overflow: auto;
     }
 
     .conversation::-webkit-scrollbar {
+        width: 10px;
         background-color: $dark;
     }
 

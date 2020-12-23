@@ -8,7 +8,7 @@ import '../sass/components/_sidebar.scss';
 const SideBar = () => {
     return (
         <div className='sidebar d-flex h-100 flex-column align-items-center'>
-            <div className='header bg-dark-accent w-100 p-3'>
+            <div className='header bg-dark-accent unselectable w-100 p-3'>
                 <h2 className='title mx-auto m-0'>Amigo</h2>
                 <div className='notifications d-flex flex-column justify-content-center align-items-end'>
                     <svg
@@ -26,7 +26,7 @@ const SideBar = () => {
             <Tab.Container id='sidebar-options' defaultActiveKey='chat'>
                 <Nav
                     variant='pills'
-                    className='w-100 justify-content-evenly'
+                    className='nav w-100 justify-content-evenly'
                     fill
                     justify>
                     <Nav.Item id='chat' title='Chat'>
@@ -81,7 +81,7 @@ const SideBar = () => {
                     </Nav.Item>
                 </Nav>
 
-                <Tab.Content className='w-100'>
+                <Tab.Content className='w-100 h-100'>
                     <Tab.Pane eventKey='chat'>
                         <Conversations />
                     </Tab.Pane>
@@ -93,6 +93,9 @@ const SideBar = () => {
                     </Tab.Pane>
                 </Tab.Content>
             </Tab.Container>
+            <div className='footer w-100 d-flex flex-column align-items-center justify-content-center'>
+                Footer
+            </div>
         </div>
     );
 };

@@ -1,6 +1,6 @@
 @import '../custom';
 
-.conversations {
+.contacts {
     height: 80vh;
     overflow-y: auto;
 
@@ -8,24 +8,20 @@
         color: $theme;
     }
 
-    .date {
-        color: $text-dark;
+    .button {
+        width: 3rem;
     }
 
-    .conversation {
+    .id {
+        color: $text;
+    }
+
+    .contact {
         transition: 0.15s ease-in-out;
     }
 
-    .conversation:hover {
+    .contact:hover {
         background-color: $dark;
-    }
-
-    .content {
-        color: $text;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: block;
     }
 }
 
