@@ -1,6 +1,6 @@
 import React from 'react';
-import Message from '../message/message';
-import './chat.scss';
+import Message from './message';
+import '../sass/components/_chat.scss';
 
 const Chat = () => {
     return (

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import './message.scss';
-import { getTime, getDate } from '../../utils/DateFormat';
+import '../sass/components/_message.scss';
+import { getTime, getDate } from '../utils/DateFormat';
 
 const Message = ({ name, content, isMe }) => {
     useEffect(() => {

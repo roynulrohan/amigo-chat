@@ -1,9 +1,9 @@
 import React from 'react';
 import { Nav, Tab, Tabs } from 'react-bootstrap';
-import Contacts from '../contacts/contacts';
-import Conversations from '../conversations/conversations';
-import Profile from '../profile/profile';
-import './sidebar.scss';
+import Contacts from './contacts';
+import Conversations from './conversations';
+import Profile from './profile';
+import '../sass/components/_sidebar.scss';
 
 const SideBar = () => {
     return (
@@ -81,7 +81,7 @@ const SideBar = () => {
                     </Nav.Item>
                 </Nav>
 
-                <Tab.Content>
+                <Tab.Content className='w-100'>
                     <Tab.Pane eventKey='chat'>
                         <Conversations />
                     </Tab.Pane>

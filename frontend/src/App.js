@@ -1,6 +1,6 @@
 import './sass/App.scss';
 import Main from './components/main';
-import SideBar from './components/sidebar/sidebar';
+import SideBar from './components/sidebar';
 
 function App() {
     return (
