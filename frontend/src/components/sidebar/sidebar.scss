@@ -12,7 +12,67 @@
     overflow-x: hidden;
 }
 
+.header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 0px 0px;
+    grid-template-areas: '. title notifications';
+}
+
 .title {
+    grid-area: title;
     color: $theme;
     font-family: 'Langar', cursive;
+}
+
+.notifications {
+    margin-right: 25px;
+    grid-area: notifications;
+}
+
+.notification-count {
+    transform: translate(5px, -5px);
+    text-align: center;
+    padding: 1px;
+    font-size: 14px;
+    width: 1.3em;
+    height: 1.3em;
+    background-color: red;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: absolute;
+}
+
+.nav-item {
+    background-color: $dark;
+}
+
+.nav-link {
+    color: $text-active;
+    
+}
+
+.nav-link:hover {
+    color: white;
+}
+
+#chat {
+    .nav-link.active {
+        background-color: $theme-secondary !important;
+    }
+}
+
+#contacts {
+    .nav-link.active {
+        background-color: #4caf50 !important;
+    }
+}
+
+#profile {
+    .nav-link.active {
+        background-color: rgb(143, 0, 199) !important;
+    }
 }
