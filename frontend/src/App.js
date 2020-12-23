@@ -1,12 +1,19 @@
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './sass/App.scss';
-import Main from './components/main';
+import Chat from './components/chat';
 import SideBar from './components/sidebar';
 import Login from './components/login';
 
 function App() {
     return (
         <div>
-            <Login />
+            <Router>
+                <Route path='/' exact>
+                    <SideBar />
+                    <Chat />
+                </Route>
+                <Route path='/login' component={Login} />
+            </Router>
         </div>
     );
 }

@@ -1,6 +1,8 @@
 @import '../custom';
 
 .chat {
+    height: 100vh !important;
+    margin-left: $sidebar-width;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 7% 83% 10%;
