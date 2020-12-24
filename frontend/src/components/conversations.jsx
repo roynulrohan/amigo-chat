@@ -4,7 +4,7 @@ import '../sass/components/_conversations.scss';
 import { useSocket } from '../contexts/SocketProvider';
 
 const Conversations = () => {
-    const [conversations, setConversations] = useState([]);
+    const [conversations, setConversations] = useState();
     const socket = useSocket();
 
     useEffect(() => {
@@ -24,7 +24,7 @@ const Conversations = () => {
 
     return (
         <div className='conversations'>
-            {conversations &&
+            {conversations ? (
                 conversations.map((conversation) => {
                     return (
                         <div className='conversation p-3'>
@@ -39,7 +39,12 @@ const Conversations = () => {
                             </small>
                         </div>
                     );
-                })}
+                })
+            ) : (
+                <div className='empty h-100 d-flex flex-column justify-content-center align-items-center'>
+                    You have no conversations yet
+                </div>
+            )}
         </div>
     );
 };

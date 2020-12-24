@@ -2,7 +2,29 @@
 
 .contacts {
     height: 80vh;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .scrollable {
+        height: 75vh;
+        overflow-y: auto;
+    }
+
+    .scrollable::-webkit-scrollbar {
+        width: 10px;
+        background-color: $dark-accent;
+    }
+
+    .scrollable::-webkit-scrollbar-thumb {
+        background-color: rgb(26, 26, 26);
+        border-radius: 50rem;
+    }
+
+    .add-button {
+        background-color: $darkest;
+        flex-grow: 1;
+    }
 
     .name {
         color: $theme;
@@ -23,14 +45,8 @@
     .contact:hover {
         background-color: $dark;
     }
-}
 
-.conversations::-webkit-scrollbar {
-    width: 10px;
-    background-color: $dark-accent;
-}
-
-.conversations::-webkit-scrollbar-thumb {
-    background-color: rgb(26, 26, 26);
-    border-radius: 50rem;
+    .empty {
+        color: $text-active;
+    }
 }

@@ -28,6 +28,7 @@ const SideBar = () => {
                     if (res.data.success) {
                         // remove user from redux store
                         dispatch(setUser());
+                        history.push('/login');
                     }
                 });
         }
@@ -108,7 +109,12 @@ const SideBar = () => {
                                 <Conversations />
                             </Tab.Pane>
                             <Tab.Pane eventKey='contacts'>
-                                <Contacts />
+                                <Contacts
+                                    contactsData={
+                                        user.currentUser &&
+                                        user.currentUser.Contacts
+                                    }
+                                />
                             </Tab.Pane>
                             <Tab.Pane eventKey='profile'>
                                 <Profile />

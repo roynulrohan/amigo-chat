@@ -102,7 +102,6 @@ router.route('/register').post(function (req, res, next) {
 });
 
 router.route('/login').post(function (req, res, next) {
-    console.log(req);
     const { body } = req;
     const { password } = body;
     let { username } = body;

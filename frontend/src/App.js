@@ -12,7 +12,6 @@ import axios from 'axios';
 
 function App() {
     const user = useSelector((state) => state.userReducer);
-    const [id, setId] = useState('');
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -39,7 +38,7 @@ function App() {
         <div>
             <Router>
                 <Route path='/' exact>
-                    <SocketProvider id={id}>
+                    <SocketProvider id={user.currentUser && user.currentUser.Username}>
                         <SideBar />
                         <Chat />
                     </SocketProvider>

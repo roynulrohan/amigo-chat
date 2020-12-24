@@ -1,12 +1,13 @@
 $dark: #282c34;
 $dark-accent: #21252b;
+$darkest: rgba(22, 22, 22, 0.288);
 $text-dark: #495153;
 $text-active: #abb2bf;
 $text: #cccccc;
 $theme: #ff0080;
-$theme-secondary:#0DCAF0;
+$theme-secondary: #0dcaf0;
 
-$sidebar-width: 25em;
+$sidebar-width: 20%;
 
 .bg-dark {
     background-color: $dark !important;

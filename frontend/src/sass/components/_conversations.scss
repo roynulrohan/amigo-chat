@@ -20,6 +20,10 @@
         background-color: $dark;
     }
 
+    .empty {
+        color: $text-active;
+    }
+
     .content {
         color: $text;
         white-space: nowrap;
