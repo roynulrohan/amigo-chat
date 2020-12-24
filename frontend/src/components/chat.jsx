@@ -1,31 +1,107 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Message from './message';
 import '../sass/components/_chat.scss';
 import { CSSTransition } from 'react-transition-group';
 import { useSocket } from '../contexts/SocketProvider';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 const Chat = () => {
     const user = useSelector((state) => state.userReducer);
-    const [messages, setMessages] = useState([
-        { name: 'Slay', content: 'Hello User!', isMe: false },
-        { name: 'User', content: 'Hello World!', isMe: true },
-    ]);
+    const location = useLocation();
+    const [recipient, setRecipient] = useState('');
+    const [messages, setMessages] = useState([]);
     const [chatInput, setChatInput] = useState('');
-    const [recipient, setRecipient] = useState('Slay');
+
     const socket = useSocket();
+
+    useEffect(() => {
+        if (user.currentUser && recipient) {
+            axios({
+                method: 'post',
+                url: 'http://localhost:4000/message/',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                data: JSON.stringify({
+                    Users: [user.currentUser.Username, recipient],
+                }),
+            }).then((res) => {
+                console.log(res);
+                if (res.data.success) {
+                    setMessages(res.data.result.Messages);
+                }
+            });
+        }
+    }, [user, recipient]);
+
+    // useEffect(() => {
+    //     if (socket == null) return;
+
+    //     if (socket) {
+    //         socket.on('recieve-message', (message) => {
+    //             console.log(messages);
+    //             setMessages([
+    //                 ...messages,
+    //                 {
+    //                     name: message.sender,
+    //                     content: message.content,
+    //                     date: message.date,
+    //                 },
+    //             ]);
+    //         });
+    //     }
+
+    //     return () => socket && socket.off('recieve-message');
+    // }, [socket]);
+
+    useEffect(() => {
+        if (location) {
+            setRecipient(location.recipient);
+        }
+    }, [location]);
 
     const messageSend = (e) => {
         e.preventDefault();
-        if (chatInput) {
-            setMessages([
-                { name: 'User', content: chatInput, isMe: true },
-                ...messages,
-            ]);
-        }
 
-        socket.emit('send-message', { recipient: 'Rohan', message: chatInput });
-        setChatInput('');
+        if (chatInput) {
+            // setMessages([
+            //     {
+            //         name: user.currentUser.Username,
+            //         content: chatInput,
+            //         isMe: true,
+            //         date: Date.now(),
+            //     },
+            //     ...messages,
+            // ]);
+
+            // socket.emit('send-message', {
+            //     recipient: recipient,
+            //     message: chatInput,
+            //     date: Date.now(),
+            // });
+
+            axios({
+                method: 'post',
+                url: 'http://localhost:4000/message/update',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                data: JSON.stringify({
+                    Users: [user.currentUser.Username, recipient],
+                    message: {
+                        Username: user.currentUser.Username,
+                        Content: chatInput,
+                        DateCreated: Date.now(),
+                    },
+                }),
+            }).then((res) => {
+                console.log(res);
+            });
+
+            setChatInput('');
+        }
     };
 
     return (
@@ -40,7 +116,7 @@ const Chat = () => {
                     <div className='header d-flex justify-content-center align-items-center w-100 p-3'>
                         <h2 className='m-0'>
                             <span className='d-flex justify-content-center align-items-center badge rounded-pill bg-dark-accent'>
-                                <span>Slay</span>
+                                <span>{recipient}</span>
                                 <span style={{ width: '2em' }}></span>
                                 <span className='badge rounded-pill bg-success'>
                                     Online
@@ -48,24 +124,28 @@ const Chat = () => {
                             </span>
                         </h2>
                     </div>
-                    <div className='conversation d-flex flex-column-reverse px-4'>
+                    <div className='conversation d-flex flex-column justify-content-end px-4'>
                         {messages &&
                             messages.map((message, index) => {
                                 let hideTitle = false;
 
-                                if (messages[index + 1]) {
+                                if (messages[index - 1]) {
                                     if (
-                                        message.name ===
-                                        messages[index + 1].name
+                                        message.Username ===
+                                        messages[index - 1].Username
                                     ) {
                                         hideTitle = true;
                                     }
                                 }
                                 return (
                                     <Message
-                                        name={message.name}
-                                        content={message.content}
-                                        isMe={message.isMe}
+                                        name={message.Username}
+                                        content={message.Content}
+                                        date={message.DateCreated}
+                                        isMe={
+                                            user.currentUser.Username ===
+                                            message.Username
+                                        }
                                         hideTitle={hideTitle}
                                     />
                                 );

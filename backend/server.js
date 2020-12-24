@@ -4,6 +4,7 @@ const PORT = process.env.PORT || 4000;
 const path = require('path');
 const server = require('http').createServer(app);
 const userRoute = require('./routes/userRoute');
+const messageRoute = require('./routes/messageRoute');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -22,14 +23,11 @@ io.on('connection', (socket) => {
     const id = socket.handshake.query.id;
     socket.join(id);
 
-    console.log(id);
-
-    socket.on('send-message', ({ recipient, message }) => {
-        console.log('new message');
-        console.log(recipient + ' - ' + message);
+    socket.on('send-message', ({ recipient, message, date }) => {
         socket.broadcast.to(recipient).emit('recieve-message', {
             sender: id,
             content: message,
+            date: date,
         });
     });
 });
@@ -50,6 +48,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use('/user', userRoute);
+app.use('/message', messageRoute);
 
 app.use(express.static(path.join(__dirname, '../frontend/build')));
 app.get('*', (req, res) => {

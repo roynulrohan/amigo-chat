@@ -38,7 +38,8 @@ function App() {
         <div>
             <Router>
                 <Route path='/' exact>
-                    <SocketProvider id={user.currentUser && user.currentUser.Username}>
+                    <SocketProvider
+                        id={user.currentUser && user.currentUser.Username}>
                         <SideBar />
                         <Chat />
                     </SocketProvider>

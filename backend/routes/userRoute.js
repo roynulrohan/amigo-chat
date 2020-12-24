@@ -1,12 +1,10 @@
 const express = require('express');
-const { remove } = require('../models/User');
 const router = express.Router();
 
 const User = require('../models/User');
 const UserSession = require('../models/UserSession');
 
 router.route('/update').put(function (req, res) {
-    console.log('here');
     const { body } = req;
     const { username, addContact, deleteContact } = body;
 
@@ -17,7 +15,7 @@ router.route('/update').put(function (req, res) {
         if (username === addContact) {
             return res.send({
                 success: false,
-                message: 'Error: Cannot add self.',
+                message: 'Cannot add self.',
             });
         }
     }
@@ -40,7 +38,8 @@ router.route('/update').put(function (req, res) {
                 } else if (previousUsers.length == 0) {
                     return res.send({
                         success: false,
-                        message: 'Error: User not found.',
+                        message:
+                            'User not found. Make sure name is case sensitive.',
                     });
                 }
 

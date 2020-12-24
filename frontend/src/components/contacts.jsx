@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUser } from '../actions';
@@ -8,6 +9,8 @@ import '../sass/components/_contacts.scss';
 const Contacts = () => {
     const user = useSelector((state) => state.userReducer);
     const dispatch = useDispatch();
+    const history = useHistory();
+
     const [contacts, setContacts] = useState([]);
     const [modalShow, setModal] = useState(false);
     const toggleModal = () => {
@@ -115,7 +118,15 @@ const Contacts = () => {
                 {contacts.length !== 0 ? (
                     contacts.map((contact) => {
                         return (
-                            <div className='contact d-flex justify-content-between align-items-center p-3'>
+                            <div
+                                key={'contact-' + contact}
+                                className='contact d-flex justify-content-between align-items-center p-3'
+                                onClick={() => {
+                                    history.push({
+                                        pathname: '/',
+                                        recipient: contact.trim(),
+                                    });
+                                }}>
                                 <div className='d-flex flex-column justify-content-between'>
                                     <h5 className='name'>{contact}</h5>
                                 </div>

@@ -2,18 +2,16 @@ import React, { useEffect } from 'react';
 import '../sass/components/_message.scss';
 import { getTime, getDate } from '../utils/DateFormat';
 
-const Message = ({ name, content, isMe, hideTitle }) => {
-    useEffect(() => {
-        console.log(getTime(new Date()));
-    }, []);
-
+const Message = ({ name, content, date, isMe, hideTitle }) => {
     return isMe ? (
         <div className='message d-flex flex-column align-items-end'>
             {hideTitle ? (
                 <> </>
             ) : (
                 <small>
-                    <span className='date'>{getTime(new Date()) + ' - '}</span>
+                    <span className='date'>
+                        {getTime(new Date(date)) + ' - '}
+                    </span>
                     <span className='text-info'>You</span>
                 </small>
             )}
@@ -26,7 +24,9 @@ const Message = ({ name, content, isMe, hideTitle }) => {
             ) : (
                 <small>
                     <span className='name'>{name}</span>
-                    <span className='date'>{' - ' + getDate(new Date())}</span>
+                    <span className='date'>
+                        {' - ' + getTime(new Date(date))}
+                    </span>
                 </small>
             )}
             <h5 className='m-0'>{content}</h5>

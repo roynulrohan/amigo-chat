@@ -20,10 +20,12 @@
     }
 
     .loading-img {
+        transition: 0.15s ease-in-out;
         width: 4em;
     }
 
     .success-img {
+        transition: 0.15s ease-in-out;
         width: 3em;
     }
 
