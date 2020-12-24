@@ -11,12 +11,20 @@
     .form {
         border-radius: 5% !important;
         width: 25rem;
-        height: 30rem;
+        height: 32rem;
         background-color: #21252b9d;
 
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+    }
+
+    .loading-img {
+        width: 5em;
+    }
+
+    .success-img {
+        width: 4em;
     }
 
     .btn {

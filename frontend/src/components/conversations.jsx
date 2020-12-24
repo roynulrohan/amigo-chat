@@ -1,27 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { getDate } from '../utils/DateFormat';
 import '../sass/components/_conversations.scss';
+import { useSocket } from '../contexts/SocketProvider';
 
 const Conversations = () => {
+    const [conversations, setConversations] = useState([]);
+    const socket = useSocket();
+
+    useEffect(() => {
+        if (socket) {
+            socket.on('recieve-message', (message) => {
+                console.log({ name: message.sender, message: message.content });
+
+                setConversations([
+                    { name: message.sender, message: message.content },
+                    ...conversations,
+                ]);
+            });
+        }
+
+        return () => socket && socket.off('recieve-message');
+    }, [socket]);
+
     return (
         <div className='conversations'>
-            <div className='conversation p-3'>
-                <div className='d-flex justify-content-between align-items-start mb-1'>
-                    <h5 className='name'>Slay</h5>
-                    <small className='date'>{getDate(new Date())}</small>
-                </div>
-                <small className='content'>Hello World</small>
-            </div>
-            <div className='conversation p-3'>
-                <div className='d-flex justify-content-between align-items-start mb-1'>
-                    <h5 className='name'>Justin</h5>
-                    <small className='date'>{getDate(new Date())}</small>
-                </div>
-                <small className='content'>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Nunc facilisis arcu et ex luctus, non semper risus vehicula.
-                </small>
-            </div>
+            {conversations &&
+                conversations.map((conversation) => {
+                    return (
+                        <div className='conversation p-3'>
+                            <div className='d-flex justify-content-between align-items-start mb-1'>
+                                <h5 className='name'>{conversation.name}</h5>
+                                <small className='date'>
+                                    {getDate(new Date())}
+                                </small>
+                            </div>
+                            <small className='content'>
+                                {conversation.message}
+                            </small>
+                        </div>
+                    );
+                })}
         </div>
     );
 };

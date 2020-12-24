@@ -2,14 +2,18 @@ import React, { useState } from 'react';
 import Message from './message';
 import '../sass/components/_chat.scss';
 import { CSSTransition } from 'react-transition-group';
+import { useSocket } from '../contexts/SocketProvider';
+import { useSelector } from 'react-redux';
 
 const Chat = () => {
+    const user = useSelector((state) => state.userReducer);
     const [messages, setMessages] = useState([
         { name: 'Slay', content: 'Hello User!', isMe: false },
         { name: 'User', content: 'Hello World!', isMe: true },
     ]);
     const [chatInput, setChatInput] = useState('');
     const [recipient, setRecipient] = useState('Slay');
+    const socket = useSocket();
 
     const messageSend = (e) => {
         e.preventDefault();
@@ -20,6 +24,7 @@ const Chat = () => {
             ]);
         }
 
+        socket.emit('send-message', { recipient: 'Rohan', message: chatInput });
         setChatInput('');
     };
 
@@ -30,7 +35,7 @@ const Chat = () => {
             timeout={600}
             classNames='fade'
             unmountOnExit>
-            {recipient ? (
+            {recipient && user.currentUser ? (
                 <div className='chat h-100' key={recipient}>
                     <div className='header d-flex justify-content-center align-items-center w-100 p-3'>
                         <h2 className='m-0'>
@@ -49,10 +54,6 @@ const Chat = () => {
                                 let hideTitle = false;
 
                                 if (messages[index + 1]) {
-                                    console.log(
-                                        message.name ===
-                                            messages[index + 1].name
-                                    );
                                     if (
                                         message.name ===
                                         messages[index + 1].name
