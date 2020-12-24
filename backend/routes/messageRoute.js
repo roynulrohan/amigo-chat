@@ -7,47 +7,98 @@ router.route('/').post(function (req, res) {
     const { body } = req;
     const { Users } = body;
 
-    Conversation.find(
-        {
-            $and: [
-                { Users: { $regex: Users[0], $options: 'i' } },
-                { Users: { $regex: Users[1], $options: 'i' } },
-            ],
-        },
-        (err, conversations) => {
-            if (err) {
-                return res.send({
-                    success: false,
-                    message: 'Server error.',
-                });
-            } else if (conversations.length === 0) {
-                const newConversation = new Conversation({
-                    Users: Users,
-                });
+    if (Users.length === 1) {
+        Conversation.find(
+            { Users: { $regex: Users[0], $options: 'i' } },
+            null,
+            { sort: '-updatedAt' },
 
-                newConversation.save((err, doc) => {
-                    console.log(doc);
-                    if (err) {
-                        return res.send({
-                            success: false,
-                            message: 'Error: server error',
+            (err, conversations) => {
+                if (err) {
+                    return res.send({
+                        success: false,
+                        message: 'Server error.',
+                    });
+                } else if (conversations.length === 0) {
+                    return res.send({
+                        success: false,
+                        message: 'No conversations found.',
+                    });
+                } else {
+                    let convoArr = [];
+
+                    conversations.forEach((conversation) => {
+                        const recipient = conversation.Users.filter(
+                            (item) => item != Users[0]
+                        )[0];
+
+                        const recentMessage =
+                            conversation.Messages[
+                                conversation.Messages.length - 1
+                            ];
+
+                        const content = recentMessage.Content;
+                        const date = recentMessage.DateCreated;
+
+                        convoArr.push({
+                            recipient: recipient,
+                            content: content,
+                            date: date,
                         });
-                    }
+                    });
+
                     return res.send({
                         success: true,
-                        message: 'Conversation Created.',
-                        result: doc,
+                        message: 'Conversation found.',
+                        result: convoArr,
                     });
-                });
-            } else {
-                return res.send({
-                    success: true,
-                    message: 'Conversation found.',
-                    result: conversations[0],
-                });
+                }
             }
-        }
-    );
+        );
+    } else if (Users.length === 2) {
+        Conversation.find(
+            {
+                $and: [
+                    { Users: { $regex: Users[0], $options: 'i' } },
+                    { Users: { $regex: Users[1], $options: 'i' } },
+                ],
+            },
+            (err, conversations) => {
+                if (err) {
+                    return res.send({
+                        success: false,
+                        message: 'Server error.',
+                    });
+                } else if (conversations.length === 0) {
+                    const newConversation = new Conversation({
+                        Users: Users,
+                    });
+
+                    newConversation.save((err, doc) => {
+                        console.log(doc);
+                        if (err) {
+                            return res.send({
+                                success: false,
+                                message: 'Error: server error',
+                            });
+                        }
+                        return res.send({
+                            success: true,
+                            message: 'Conversation Created.',
+                            result: doc,
+                        });
+                    });
+                } else {
+                    conversations[0].Messages.reverse();
+                    return res.send({
+                        success: true,
+                        message: 'Conversation found.',
+                        result: conversations[0],
+                    });
+                }
+            }
+        );
+    }
 });
 
 router.route('/update').post(function (req, res) {

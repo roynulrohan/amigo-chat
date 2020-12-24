@@ -160,7 +160,7 @@ const Contacts = () => {
             </div>
             <div className='add-button d-flex align-items-stretch px-5 py-3'>
                 <button
-                    className='btn btn-info h-100 w-100'
+                    className='btn btn-success h-100 w-100'
                     onClick={() => toggleModal()}>
                     New Contact
                 </button>

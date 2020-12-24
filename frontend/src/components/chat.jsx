@@ -28,33 +28,36 @@ const Chat = () => {
                     Users: [user.currentUser.Username, recipient],
                 }),
             }).then((res) => {
-                console.log(res);
                 if (res.data.success) {
+                    console.log(res.data.result.Messages);
                     setMessages(res.data.result.Messages);
                 }
             });
         }
+
+        return () => {
+            setMessages([]);
+        };
     }, [user, recipient]);
 
-    // useEffect(() => {
-    //     if (socket == null) return;
+    useEffect(() => {
+        if (socket == null) return;
 
-    //     if (socket) {
-    //         socket.on('recieve-message', (message) => {
-    //             console.log(messages);
-    //             setMessages([
-    //                 ...messages,
-    //                 {
-    //                     name: message.sender,
-    //                     content: message.content,
-    //                     date: message.date,
-    //                 },
-    //             ]);
-    //         });
-    //     }
+        if (socket) {
+            socket.on('recieve-message', (message) => {
+                setMessages((messages) => [
+                    {
+                        Username: message.sender,
+                        Content: message.content,
+                        DateCreated: message.date,
+                    },
+                    ...messages,
+                ]);
+            });
+        }
 
-    //     return () => socket && socket.off('recieve-message');
-    // }, [socket]);
+        return () => socket && socket.off('recieve-message');
+    }, [socket, messages]);
 
     useEffect(() => {
         if (location) {
@@ -66,21 +69,20 @@ const Chat = () => {
         e.preventDefault();
 
         if (chatInput) {
-            // setMessages([
-            //     {
-            //         name: user.currentUser.Username,
-            //         content: chatInput,
-            //         isMe: true,
-            //         date: Date.now(),
-            //     },
-            //     ...messages,
-            // ]);
+            setMessages((messages) => [
+                {
+                    Username: user.currentUser.Username,
+                    Content: chatInput,
+                    DateCreated: new Date(),
+                },
+                ...messages,
+            ]);
 
-            // socket.emit('send-message', {
-            //     recipient: recipient,
-            //     message: chatInput,
-            //     date: Date.now(),
-            // });
+            socket.emit('send-message', {
+                recipient: recipient,
+                message: chatInput,
+                date: Date.now(),
+            });
 
             axios({
                 method: 'post',
@@ -96,8 +98,6 @@ const Chat = () => {
                         DateCreated: Date.now(),
                     },
                 }),
-            }).then((res) => {
-                console.log(res);
             });
 
             setChatInput('');
@@ -110,9 +110,10 @@ const Chat = () => {
             appear={true}
             timeout={600}
             classNames='fade'
-            unmountOnExit>
+            unmountOnExit
+            key={recipient}>
             {recipient && user.currentUser ? (
-                <div className='chat h-100' key={recipient}>
+                <div className='chat h-100'>
                     <div className='header d-flex justify-content-center align-items-center w-100 p-3'>
                         <h2 className='m-0'>
                             <span className='d-flex justify-content-center align-items-center badge rounded-pill bg-dark-accent'>
@@ -124,21 +125,22 @@ const Chat = () => {
                             </span>
                         </h2>
                     </div>
-                    <div className='conversation d-flex flex-column justify-content-end px-4'>
+                    <div className='conversation d-flex flex-column-reverse px-4'>
                         {messages &&
                             messages.map((message, index) => {
                                 let hideTitle = false;
 
-                                if (messages[index - 1]) {
+                                if (messages[index + 1]) {
                                     if (
                                         message.Username ===
-                                        messages[index - 1].Username
+                                        messages[index + 1].Username
                                     ) {
                                         hideTitle = true;
                                     }
                                 }
                                 return (
                                     <Message
+                                        key={message._id}
                                         name={message.Username}
                                         content={message.Content}
                                         date={message.DateCreated}
