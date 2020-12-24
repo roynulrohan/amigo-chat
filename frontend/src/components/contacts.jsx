@@ -1,13 +1,114 @@
 import React, { useState, useEffect } from 'react';
+import { Modal, Button, Form } from 'react-bootstrap';
+import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+import { setUser } from '../actions';
 import '../sass/components/_contacts.scss';
 
-const Contacts = ({ contactsData }) => {
-    const [contacts, setContacts] = useState(contactsData);
+const Contacts = () => {
+    const user = useSelector((state) => state.userReducer);
+    const dispatch = useDispatch();
+    const [contacts, setContacts] = useState([]);
+    const [modalShow, setModal] = useState(false);
+    const toggleModal = () => {
+        setModal(!modalShow);
+    };
+
+    const [formUsername, setformUsername] = useState('');
+    const [formError, setformError] = useState('');
 
     useEffect(() => {
-        
-    }, []);
+        if (user.currentUser) {
+            setContacts(user.currentUser.Contacts);
+        }
+    }, [user]);
 
+    const deleteContact = (username) => {
+        // Post request to backend
+        axios({
+            method: 'put',
+            url: 'http://localhost:4000/user/update',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: JSON.stringify({
+                username: user.currentUser.Username,
+                deleteContact: username,
+            }),
+        }).then((res) => {
+            if (res.data.success) {
+                dispatch(setUser(res.data.result));
+                setContacts(res.data.result.Contacts);
+            }
+        });
+    };
+
+    const addSubmit = () => {
+        // Post request to backend
+        axios({
+            method: 'put',
+            url: 'http://localhost:4000/user/update',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: JSON.stringify({
+                username: user.currentUser.Username,
+                addContact: formUsername,
+            }),
+        }).then((res) => {
+            if (res.data.success) {
+                dispatch(setUser(res.data.result));
+                setContacts(res.data.result.Contacts);
+                setformError('');
+                setformUsername('');
+                toggleModal();
+            } else {
+                setformError(res.data.message);
+            }
+        });
+    };
+
+    const addModal = () => {
+        return (
+            <Modal show={modalShow} onClose={toggleModal} className='text-dark'>
+                <Modal.Header>
+                    <Modal.Title>New Contact</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            addSubmit();
+                        }}>
+                        <Form.Group>
+                            <Form.Label>Username</Form.Label>
+                            <Form.Control
+                                type='name'
+                                placeholder='Enter contacts username'
+                                value={formUsername}
+                                onChange={(ev) => {
+                                    setformUsername(ev.target.value);
+                                }}
+                            />
+                        </Form.Group>
+                    </Form>
+                    <p className='text-danger mt-3'>{formError}</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button type='submit' variant='primary'>
+                        Submit
+                    </Button>
+                    <Button
+                        variant='secondary'
+                        onClick={() => {
+                            toggleModal();
+                        }}>
+                        Cancel
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        );
+    };
     return (
         <div className='contacts'>
             <div className='scrollable'>
@@ -18,7 +119,11 @@ const Contacts = ({ contactsData }) => {
                                 <div className='d-flex flex-column justify-content-between'>
                                     <h5 className='name'>{contact}</h5>
                                 </div>
-                                <a className='button btn btn-danger text-dark text-center p-2'>
+                                <a
+                                    className='button btn btn-danger text-dark text-center p-2'
+                                    onClick={() => {
+                                        deleteContact(contact);
+                                    }}>
                                     <svg
                                         xmlns='http://www.w3.org/2000/svg'
                                         width='1.3em'
@@ -43,8 +148,13 @@ const Contacts = ({ contactsData }) => {
                 )}
             </div>
             <div className='add-button d-flex align-items-stretch px-5 py-3'>
-                <button className='btn btn-info h-100 w-100'>New Contact</button>
+                <button
+                    className='btn btn-info h-100 w-100'
+                    onClick={() => toggleModal()}>
+                    New Contact
+                </button>
             </div>
+            {addModal()}
         </div>
     );
 };

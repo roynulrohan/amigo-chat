@@ -22,7 +22,6 @@
     }
 
     .add-button {
-        background-color: $darkest;
         flex-grow: 1;
     }
 
@@ -48,5 +47,9 @@
 
     .empty {
         color: $text-active;
+    }
+
+    .add-modal {
+        color: black;
     }
 }

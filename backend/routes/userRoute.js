@@ -5,14 +5,87 @@ const router = express.Router();
 const User = require('../models/User');
 const UserSession = require('../models/UserSession');
 
-router.route('/').put(function (req, res) {
-    console.log('here');
-});
-
 router.route('/update').put(function (req, res) {
+    console.log('here');
     const { body } = req;
+    const { username, addContact, deleteContact } = body;
 
-    console.log('update user');
+    let params = {};
+
+    if (addContact) {
+        params = { $addToSet: { Contacts: addContact } };
+        if (username === addContact) {
+            return res.send({
+                success: false,
+                message: 'Error: Cannot add self.',
+            });
+        }
+    }
+
+    if (deleteContact) {
+        params = { $pull: { Contacts: deleteContact } };
+    }
+
+    if (addContact) {
+        User.find(
+            {
+                Username: addContact,
+            },
+            (err, previousUsers) => {
+                if (err) {
+                    return res.send({
+                        success: false,
+                        message: 'Server error.',
+                    });
+                } else if (previousUsers.length == 0) {
+                    return res.send({
+                        success: false,
+                        message: 'Error: User not found.',
+                    });
+                }
+
+                User.findOneAndUpdate(
+                    { Username: username },
+                    params,
+                    { new: true, upsert: true },
+                    function (err, result) {
+                        if (err) {
+                            console.log(err);
+                            res.send({
+                                success: false,
+                                message: 'Server error.',
+                            });
+                        } else {
+                            res.send({
+                                success: true,
+                                result: result,
+                            });
+                        }
+                    }
+                );
+            }
+        );
+    } else if (deleteContact) {
+        User.findOneAndUpdate(
+            { Username: username },
+            params,
+            { new: true, upsert: true },
+            function (err, result) {
+                if (err) {
+                    console.log(err);
+                    res.send({
+                        success: false,
+                        message: 'Server error.',
+                    });
+                } else {
+                    res.send({
+                        success: true,
+                        result: result,
+                    });
+                }
+            }
+        );
+    }
 });
 
 router.route('/register').post(function (req, res, next) {
