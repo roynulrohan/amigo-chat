@@ -33,6 +33,7 @@ const Conversations = () => {
     }, [user]);
 
     useEffect(() => {
+        console.log(messageReducer.currentMessage);
         if (messageReducer.currentMessage) {
             if (conversations.length !== 0) {
                 let search = conversations.find((conversation) => {

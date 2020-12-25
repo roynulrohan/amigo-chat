@@ -3,13 +3,15 @@ import Message from './message';
 import '../sass/components/_chat.scss';
 import { CSSTransition } from 'react-transition-group';
 import { useSocket } from '../contexts/SocketProvider';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useHistory } from 'react-router-dom';
 import axios from 'axios';
+import { setMessage } from '../actions';
 
 const Chat = () => {
     const user = useSelector((state) => state.userReducer);
     const messageReducer = useSelector((state) => state.messageReducer);
+    const dispatch = useDispatch();
     const location = useLocation();
     const [recipient, setRecipient] = useState('');
     const [messages, setMessages] = useState([]);
@@ -71,7 +73,7 @@ const Chat = () => {
     }, [location]);
 
     useEffect(() => {
-        if (messageReducer.currentMessage) {
+        if (messageReducer.currentMessage && !messageReducer.currentMessage.isMe) {
             setMessages((messages) => [
                 {
                     Username: messageReducer.currentMessage.sender,
@@ -103,8 +105,15 @@ const Chat = () => {
                 message: chatInput,
                 date: Date.now(),
             });
-            
-            
+
+            dispatch(
+                setMessage({
+                    sender: recipient,
+                    content: chatInput,
+                    date: Date.now(),
+                    isMe: true,
+                })
+            );
 
             setSendButtonDisabled(true);
             axios({
