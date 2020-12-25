@@ -12,13 +12,21 @@ const Contacts = () => {
     const history = useHistory();
 
     const [contacts, setContacts] = useState([]);
-    const [modalShow, setModal] = useState(false);
-    const toggleModal = () => {
-        setModal(!modalShow);
+
+    const [addModalShow, setAddModalShow] = useState(false);
+    const toggleAddModal = () => {
+        setAddModalShow(!addModalShow);
     };
 
     const [formUsername, setformUsername] = useState('');
     const [formError, setformError] = useState('');
+
+    const [deleteModalShow, setDeleteModalShow] = useState(false);
+    const toggleDeleteModal = () => {
+        setDeleteModalShow(!deleteModalShow);
+    };
+
+    const [toDelete, setToDelete] = useState('');
 
     useEffect(() => {
         if (user.currentUser) {
@@ -42,6 +50,8 @@ const Contacts = () => {
             if (res.data.success) {
                 dispatch(setUser(res.data.result));
                 setContacts(res.data.result.Contacts);
+                setToDelete('');
+                toggleDeleteModal();
             }
         });
     };
@@ -64,7 +74,7 @@ const Contacts = () => {
                 setContacts(res.data.result.Contacts);
                 setformError('');
                 setformUsername('');
-                toggleModal();
+                toggleAddModal();
             } else {
                 setformError(res.data.message);
             }
@@ -73,7 +83,10 @@ const Contacts = () => {
 
     const addModal = () => {
         return (
-            <Modal show={modalShow} onClose={toggleModal} className='text-dark'>
+            <Modal
+                show={addModalShow}
+                onClose={toggleAddModal}
+                className='text-dark'>
                 <Modal.Header>
                     <Modal.Title>New Contact</Modal.Title>
                 </Modal.Header>
@@ -98,13 +111,13 @@ const Contacts = () => {
                     <p className='text-danger mt-3'>{formError}</p>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button type='submit' variant='primary'>
+                    <Button type='submit' variant='success'>
                         Submit
                     </Button>
                     <Button
                         variant='secondary'
                         onClick={() => {
-                            toggleModal();
+                            toggleAddModal();
                         }}>
                         Cancel
                     </Button>
@@ -112,6 +125,41 @@ const Contacts = () => {
             </Modal>
         );
     };
+
+    const deleteModal = () => {
+        return (
+            <Modal
+                show={deleteModalShow}
+                onClose={toggleDeleteModal}
+                className='text-dark'>
+                <Modal.Header>
+                    <Modal.Title>Deleting Contact</Modal.Title>
+                </Modal.Header>
+
+                <Modal.Body>
+                    <p>Are you sure you want to delete {toDelete} ?</p>
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button
+                        variant='danger'
+                        onClick={() => {
+                            deleteContact(toDelete);
+                        }}>
+                        Submit
+                    </Button>
+                    <Button
+                        variant='secondary'
+                        onClick={() => {
+                            toggleDeleteModal();
+                        }}>
+                        Cancel
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        );
+    };
+
     return (
         <div className='contacts'>
             <div className='scrollable'>
@@ -121,6 +169,7 @@ const Contacts = () => {
                             <div
                                 key={'contact-' + contact}
                                 className='contact d-flex justify-content-between align-items-center p-3'
+                                title={'Message ' + contact}
                                 onClick={() => {
                                     history.push({
                                         pathname: '/',
@@ -131,9 +180,11 @@ const Contacts = () => {
                                     <h5 className='name'>{contact}</h5>
                                 </div>
                                 <a
-                                    className='button btn btn-danger text-dark text-center p-2'
+                                    className='delete-button text-danger text-center p-1'
+                                    title='Delete'
                                     onClick={() => {
-                                        deleteContact(contact);
+                                        setToDelete(contact);
+                                        toggleDeleteModal();
                                     }}>
                                     <svg
                                         xmlns='http://www.w3.org/2000/svg'
@@ -154,18 +205,20 @@ const Contacts = () => {
                     })
                 ) : (
                     <div className='empty h-100 d-flex flex-column justify-content-center align-items-center'>
-                        You have no contacts
+                        You have no contacts yet.
                     </div>
                 )}
             </div>
             <div className='add-button d-flex align-items-stretch px-5 py-3'>
                 <button
-                    className='btn btn-success h-100 w-100'
-                    onClick={() => toggleModal()}>
+                    title='New Contact'
+                    className='btn h-100 w-100'
+                    onClick={() => toggleAddModal()}>
                     New Contact
                 </button>
             </div>
             {addModal()}
+            {deleteModal()}
         </div>
     );
 };

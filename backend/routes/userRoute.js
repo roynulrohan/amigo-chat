@@ -144,7 +144,6 @@ router.route('/register').post(function (req, res, next) {
             newUser.set({ Password: newUser.generateHash(password) });
 
             newUser.save((err, user) => {
-                console.log(user);
                 if (err) {
                     return res.send({
                         success: false,

@@ -44,7 +44,16 @@ const SideBar = () => {
             {user.currentUser ? (
                 <div className='sidebar d-flex h-100 flex-column align-items-center'>
                     <div className='header bg-dark-accent unselectable w-100 p-3'>
-                        <h2 className='title mx-auto m-0'>Amigo</h2>
+                        <h2
+                            className='app-title pointer mx-auto m-0'
+                            onClick={() => {
+                                history.push({
+                                    pathname: '/',
+                                    recipient: '',
+                                });
+                            }}>
+                            Amigo
+                        </h2>
                     </div>
                     <Tab.Container id='sidebar-options' defaultActiveKey='chat'>
                         <Nav
@@ -123,7 +132,7 @@ const SideBar = () => {
                     </Tab.Container>
                     <div className='footer w-100 d-flex flex-column align-items-center justify-content-center'>
                         <div className='d-flex justify-content-between align-items-center w-100 px-5'>
-                            <h5>
+                            <h5 className='username'>
                                 {user.currentUser && user.currentUser.Username}
                             </h5>
                             <button
@@ -135,16 +144,7 @@ const SideBar = () => {
                     </div>
                 </div>
             ) : (
-                <div className='sidebar d-flex h-100 flex-column justify-content-center align-items-center'>
-                    <h5>You must be logged in.</h5>
-                    <button
-                        className='btn btn-primary mt-5'
-                        onClick={() => {
-                            history.push('/login');
-                        }}>
-                        Login
-                    </button>
-                </div>
+                <></>
             )}
         </CSSTransition>
     );

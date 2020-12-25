@@ -38,7 +38,10 @@ router.route('/').post(function (req, res) {
                             ];
 
                         const content = recentMessage && recentMessage.Content;
-                        const date = recentMessage && recentMessage.DateCreated;
+                        const date = recentMessage
+                            ? recentMessage.DateCreated
+                            : conversation.createdAt;
+                        console.log(conversation);
 
                         convoArr.push({
                             recipient: recipient,
@@ -75,7 +78,6 @@ router.route('/').post(function (req, res) {
                     });
 
                     newConversation.save((err, doc) => {
-                        console.log(doc);
                         if (err) {
                             return res.send({
                                 success: false,

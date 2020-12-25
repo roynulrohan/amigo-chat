@@ -4,16 +4,18 @@ import '../sass/components/_chat.scss';
 import { CSSTransition } from 'react-transition-group';
 import { useSocket } from '../contexts/SocketProvider';
 import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 const Chat = () => {
     const user = useSelector((state) => state.userReducer);
     const location = useLocation();
+    const history = useHistory();
     const [recipient, setRecipient] = useState('');
     const [messages, setMessages] = useState([]);
     const [chatInput, setChatInput] = useState('');
     const [sendButtonDisabled, setSendButtonDisabled] = useState(false);
+    const [conversationCount, setConversationCount] = useState(0);
     const socket = useSocket();
 
     useEffect(() => {
@@ -29,8 +31,25 @@ const Chat = () => {
                 }),
             }).then((res) => {
                 if (res.data.success) {
-                    console.log(res.data.result.Messages);
                     setMessages(res.data.result.Messages);
+                }
+            });
+        }
+
+        if (user.currentUser && !recipient) {
+            axios({
+                method: 'post',
+                url: 'http://localhost:4000/message/',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                data: JSON.stringify({
+                    Users: [user.currentUser.Username],
+                }),
+            }).then((res) => {
+                console.log(res);
+                if (res.data.success) {
+                    setConversationCount(res.data.result.length);
                 }
             });
         }
@@ -184,7 +203,63 @@ const Chat = () => {
                     </div>
                 </div>
             ) : (
-                <></>
+                <div
+                    className={
+                        'chat d-flex flex-column justify-content-center align-items-center ' +
+                        (user.currentUser ? '' : 'm-0')
+                    }>
+                    {user.currentUser ? (
+                        <div className='text-center app-font prewrap'>
+                            <h2>
+                                Hello,
+                                <span className='app-title ms-3'>
+                                    {user.currentUser.Username}
+                                </span>
+                            </h2>
+                            <h5 className='text-muted mt-3'>
+                                {conversationCount !== 0 ? (
+                                    <span>
+                                        {'You have ' +
+                                            conversationCount +
+                                            (conversationCount > 1
+                                                ? ' active conversations.\nClick on one to chat!'
+                                                : ' active conversation.\nClick on their card to chat!')}
+                                    </span>
+                                ) : user.currentUser.Contacts.length !== 0 ? (
+                                    <span>
+                                        {'You have ' +
+                                            user.currentUser.Contacts.length +
+                                            (user.currentUser.Contacts.length >
+                                            1
+                                                ? ' contacts.\nClick on one to chat!'
+                                                : ' contact.\nClick on their card to chat!')}
+                                    </span>
+                                ) : (
+                                    <span>
+                                        {
+                                            'You have no contacts yet.\nHead over to the contacts tab to create one!'
+                                        }
+                                    </span>
+                                )}
+                            </h5>
+                        </div>
+                    ) : (
+                        <div className='text-center'>
+                            <h1 className='app-font'>Welcome to</h1>
+                            <h1 className='app-title'>Amigo</h1>
+                            <h5 className='app-font my-4 text-muted'>
+                                Login or Register to get started!
+                            </h5>
+                            <button
+                                className='btn btn-primary'
+                                onClick={() => {
+                                    history.push('/login');
+                                }}>
+                                Continue
+                            </button>
+                        </div>
+                    )}
+                </div>
             )}
         </CSSTransition>
     );

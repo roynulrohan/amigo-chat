@@ -3,9 +3,10 @@
 .conversations {
     height: 80vh;
     overflow-y: auto;
+    padding-top: 0.25rem;
 
     .name {
-        color: $theme;
+        color: $theme-secondary;
     }
 
     .date {
@@ -13,6 +14,10 @@
     }
 
     .conversation {
+        cursor: pointer;
+        background-color: $darkest;
+        margin: 0.5rem;
+        border-radius: 15px;
         transition: 0.15s ease-in-out;
     }
 

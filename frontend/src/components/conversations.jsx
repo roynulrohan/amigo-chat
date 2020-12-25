@@ -94,6 +94,7 @@ const Conversations = () => {
                             classNames='fade'
                             unmountOnExit>
                             <div
+                            title={"Open Conversation"}
                                 key={'conversation-' + conversation.recipient}
                                 className='conversation p-3'
                                 onClick={() => {
@@ -119,7 +120,7 @@ const Conversations = () => {
                 })
             ) : (
                 <div className='empty h-100 d-flex flex-column justify-content-center align-items-center'>
-                    You have no conversations yet
+                    You have no conversations yet.
                 </div>
             )}
         </div>

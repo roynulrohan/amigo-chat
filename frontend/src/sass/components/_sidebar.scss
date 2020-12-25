@@ -18,14 +18,10 @@
 
     .footer {
         background-color: rgba(22, 22, 22, 0.288);
-        margin-top: auto; 
+        margin-top: auto;
         height: 10% !important;
         min-height: 10% !important;
-    }
 
-    .title {
-        color: $theme;
-        font-family: 'Langar', cursive;
     }
 
     .nav-item {
@@ -42,19 +38,19 @@
 
     #chat {
         .nav-link.active {
-            background-color: $theme-secondary !important;
+            background-color: $theme-purple !important;
         }
     }
 
     #contacts {
         .nav-link.active {
-            background-color: #4caf50 !important;
+            background-color: $theme-green !important;
         }
     }
 
     #profile {
         .nav-link.active {
-            background-color: rgb(143, 0, 199) !important;
+            background-color: $theme-orange !important;
         }
     }
 }

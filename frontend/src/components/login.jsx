@@ -61,7 +61,7 @@ const Login = () => {
         return (
             <form className='form rounded p-4' onSubmit={formSubmit}>
                 <div className='d-flex flex-column'>
-                    <h2 className='title mb-3 unselectable'>Amigo</h2>
+                    <h2 className='app-title mb-3 unselectable'>Amigo</h2>
                     <div class='form-group mb-3'>
                         <label for='usernameInput' className='mb-2'>
                             Username
@@ -126,8 +126,21 @@ const Login = () => {
 
     const successContainer = () => {
         return (
-            <div className='form d-flex flex-column justify-content-center align-items-center'>
+            <div className='form d-flex flex-column justify-content-center align-items-center text-center'>
+                <div className='app-font mb-5'>
+                    <h5>Logged in as</h5>
+                    <h2 className='app-title mt-3'>
+                        {user.currentUser.Username}
+                    </h2>
+                </div>
                 <img className='success-img' src={doneIcon}></img>
+                <button
+                    className='btn btn-info mt-5'
+                    onClick={() => {
+                        history.push('/');
+                    }}>
+                    Continue
+                </button>
             </div>
         );
     };
@@ -162,7 +175,7 @@ const Login = () => {
                     <span></span>
                     <span></span>
                 </div>
-                
+
                 {loading
                     ? loadingContainer()
                     : user.currentUser

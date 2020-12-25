@@ -26,6 +26,24 @@ body {
     margin-left: $sidebar-width;
 }
 
+.app-title {
+    color: $theme;
+    font-family: 'Langar', cursive;
+    text-align: center;
+}
+
+.app-font, .app-font * {
+    font-family: 'Langar', cursive;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.prewrap {
+    white-space: pre-wrap;
+}
+
 .fade-appear {
     opacity: 0;
     z-index: 1;
