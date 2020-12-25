@@ -57,6 +57,11 @@ const Contacts = () => {
     };
 
     const addContact = () => {
+        if (!formUsername) {
+            setformError('Please enter a username.');
+            return;
+        }
+
         if (user.currentUser.Contacts.includes(formUsername)) {
             setformError('User already added.');
             return;
@@ -112,7 +117,7 @@ const Contacts = () => {
                             <Form.Label>Username</Form.Label>
                             <Form.Control
                                 type='name'
-                                placeholder='Enter contacts username'
+                                placeholder='Enter contact&#39;s username'
                                 value={formUsername}
                                 onChange={(ev) => {
                                     setformUsername(ev.target.value);
@@ -125,12 +130,12 @@ const Contacts = () => {
                 <Modal.Footer>
                     <Button
                         type='submit'
-                        variant='success'
+                        variant='warning'
                         onClick={() => {
                             setformError('');
                             addContact();
                         }}>
-                        Submit
+                        Confirm
                     </Button>
                     <Button
                         variant='secondary'
@@ -166,7 +171,7 @@ const Contacts = () => {
                         onClick={() => {
                             deleteContact(toDelete);
                         }}>
-                        Submit
+                        Delete
                     </Button>
                     <Button
                         variant='secondary'

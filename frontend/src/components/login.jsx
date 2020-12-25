@@ -27,6 +27,14 @@ const Login = () => {
         }
     }, [isRegistering]);
 
+    const validUsername = () => {
+        if (username.length >= 6 && username.length <= 14) {
+            return <small className='text-success'>6-14 characters</small>;
+        } else {
+            return <small className='text-danger'>6-14 characters</small>;
+        }
+    };
+
     const formSubmit = (e) => {
         e.preventDefault();
 
@@ -81,8 +89,11 @@ const Login = () => {
                 <div className='d-flex flex-column'>
                     <h2 className='app-title mb-3 unselectable'>Amigo</h2>
                     <div class='form-group mb-3'>
-                        <label for='usernameInput' className='mb-2'>
+                        <label
+                            for='usernameInput'
+                            className='mb-2 d-flex justify-content-between align-items-center'>
                             Username
+                            {isRegistering && validUsername()}
                         </label>
                         <input
                             type='name'

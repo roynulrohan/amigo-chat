@@ -13,6 +13,7 @@
     .header {
         display: flex;
         justify-content: center;
+        align-items: center;
         min-height: 7% !important;
     }
 
@@ -21,7 +22,6 @@
         margin-top: auto;
         height: 10% !important;
         min-height: 10% !important;
-
     }
 
     .nav-item {
@@ -44,13 +44,13 @@
 
     #contacts {
         .nav-link.active {
-            background-color: $theme-green !important;
+            background-color: $theme-orange !important;
         }
     }
 
     #profile {
         .nav-link.active {
-            background-color: $theme-orange !important;
+            background-color: $theme-green !important;
         }
     }
 }
