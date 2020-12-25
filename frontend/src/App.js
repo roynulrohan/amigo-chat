@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, useHistory } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './sass/App.scss';
-import Chat from './components/chat';
-import SideBar from './components/sidebar';
 import Login from './components/login';
 import { SocketProvider } from './contexts/SocketProvider';
 import { getFromStorage } from './utils/storage';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUser } from './actions';
 import axios from 'axios';
+import Main from './components/main';
 
 function App() {
     const user = useSelector((state) => state.userReducer);
@@ -40,8 +39,7 @@ function App() {
                 <Route path='/' exact>
                     <SocketProvider
                         id={user.currentUser && user.currentUser.Username}>
-                        <SideBar />
-                        <Chat />
+                        <Main />
                     </SocketProvider>
                 </Route>
                 <Route path='/login' component={Login} />

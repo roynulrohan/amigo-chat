@@ -9,9 +9,9 @@ import '../sass/components/_conversations.scss';
 
 const Conversations = () => {
     const user = useSelector((state) => state.userReducer);
+    const messageReducer = useSelector((state) => state.messageReducer);
     const [conversations, setConversations] = useState([]);
     const history = useHistory();
-    const socket = useSocket();
 
     useEffect(() => {
         if (user.currentUser) {
@@ -25,7 +25,6 @@ const Conversations = () => {
                     Users: [user.currentUser.Username],
                 }),
             }).then((res) => {
-                console.log(res);
                 if (res.data.success) {
                     setConversations(res.data.result);
                 }
@@ -34,14 +33,13 @@ const Conversations = () => {
     }, [user]);
 
     useEffect(() => {
-        if (socket == null) return;
-
-        console.log(socket);
-
-        socket.on('recieve-message', (message) => {
+        if (messageReducer.currentMessage) {
             if (conversations.length !== 0) {
                 let search = conversations.find((conversation) => {
-                    return conversation.recipient === message.sender;
+                    return (
+                        conversation.recipient ===
+                        messageReducer.currentMessage.sender
+                    );
                 });
 
                 if (search) {
@@ -53,16 +51,16 @@ const Conversations = () => {
 
                     let copy = [...conversations];
                     let item = copy[pos];
-                    item.content = message.content;
+                    item.content = messageReducer.currentMessage.content;
                     copy[pos] = item;
 
                     setConversations(copy);
                 } else {
                     setConversations((conversations) => [
                         {
-                            recipient: message.sender,
-                            content: message.content,
-                            date: message.date,
+                            recipient: messageReducer.currentMessage.sender,
+                            content: messageReducer.currentMessage.content,
+                            date: messageReducer.currentMessage.date,
                         },
                         ...conversations,
                     ]);
@@ -70,17 +68,15 @@ const Conversations = () => {
             } else {
                 setConversations((conversations) => [
                     {
-                        recipient: message.sender,
-                        content: message.content,
-                        date: message.date,
+                        recipient: messageReducer.currentMessage.sender,
+                        content: messageReducer.currentMessage.content,
+                        date: messageReducer.currentMessage.date,
                     },
                     ...conversations,
                 ]);
             }
-        });
-
-        return () => socket && socket.off('recieve-message');
-    }, [socket, conversations]);
+        }
+    }, [messageReducer]);
 
     return (
         <div className='conversations'>
@@ -94,7 +90,7 @@ const Conversations = () => {
                             classNames='fade'
                             unmountOnExit>
                             <div
-                            title={"Open Conversation"}
+                                title={'Open Conversation'}
                                 key={'conversation-' + conversation.recipient}
                                 className='conversation p-3'
                                 onClick={() => {

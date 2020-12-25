@@ -9,6 +9,7 @@ import axios from 'axios';
 
 const Chat = () => {
     const user = useSelector((state) => state.userReducer);
+    const messageReducer = useSelector((state) => state.messageReducer);
     const location = useLocation();
     const history = useHistory();
     const [recipient, setRecipient] = useState('');
@@ -47,7 +48,6 @@ const Chat = () => {
                     Users: [user.currentUser.Username],
                 }),
             }).then((res) => {
-                console.log(res);
                 if (res.data.success) {
                     setConversationCount(res.data.result.length);
                 }
@@ -60,29 +60,25 @@ const Chat = () => {
     }, [user, recipient]);
 
     useEffect(() => {
-        if (socket == null) return;
-
-        if (socket) {
-            socket.on('recieve-message', (message) => {
-                setMessages((messages) => [
-                    {
-                        Username: message.sender,
-                        Content: message.content,
-                        DateCreated: message.date,
-                    },
-                    ...messages,
-                ]);
-            });
-        }
-
-        return () => socket && socket.off('recieve-message');
-    }, [socket, messages]);
-
-    useEffect(() => {
         if (location) {
             setRecipient(location.recipient);
         }
     }, [location]);
+
+    useEffect(() => {
+        if (messageReducer.currentMessage) {
+            setMessages((messages) => [
+                {
+                    Username: messageReducer.currentMessage.sender,
+                    Content: messageReducer.currentMessage.content,
+                    DateCreated: messageReducer.currentMessage.date,
+                },
+                ...messages,
+            ]);
+        }
+
+        return () => socket && socket.off('recieve-message');
+    }, [messageReducer]);
 
     const messageSend = (e) => {
         e.preventDefault();
