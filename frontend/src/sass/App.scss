@@ -37,6 +37,13 @@ body {
     font-family: 'Langar', cursive;
 }
 
+.pfp {
+    border-radius: 50%;
+    object-fit: cover;
+    height: 100%;
+    max-width: 100% !important;
+}
+
 .pointer {
     cursor: pointer;
 }

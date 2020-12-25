@@ -1,0 +1,22 @@
+.profile {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .photo {
+        height: 100px;
+        width: 100px;
+    }
+
+    input:active,
+    input:focus {
+        border-color: white;
+        box-shadow: none;
+    }
+
+    button:active,
+    button:focus {
+        box-shadow: none;
+    }
+}

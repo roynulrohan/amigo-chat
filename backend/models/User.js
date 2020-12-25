@@ -6,6 +6,7 @@ const User = new Schema({
     Username: {
         type: String,
         required: true,
+        trim: true,
     },
     Password: {
         type: String,
@@ -18,6 +19,10 @@ const User = new Schema({
     DateCreated: {
         type: Date,
         default: Date.now,
+    },
+    PhotoURL: {
+        type: String,
+        default: '',
     },
 });
 

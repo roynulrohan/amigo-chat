@@ -9,6 +9,7 @@ import { getFromStorage } from '../utils/storage';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUser } from '../actions';
 import axios from 'axios';
+import defaultDP from '../assets/profile.png';
 import '../sass/components/_sidebar.scss';
 
 const SideBar = () => {
@@ -104,7 +105,6 @@ const SideBar = () => {
                             <Nav.Item id='profile' title='Profile'>
                                 <Nav.Link
                                     eventKey='profile'
-                                    disabled
                                     className='d-flex justify-content-evenly align-items-center'>
                                     <svg
                                         xmlns='http://www.w3.org/2000/svg'
@@ -140,17 +140,27 @@ const SideBar = () => {
                             </Tab.Pane>
                         </Tab.Content>
                     </Tab.Container>
-                    <div className='footer w-100 d-flex flex-column align-items-center justify-content-center'>
-                        <div className='d-flex justify-content-between align-items-center w-100 px-5'>
-                            <h5 className='username app-font'>
+                    <div className='footer w-100 d-flex align-items-center justify-content-between px-4'>
+                        <div className='d-flex align-items-center'>
+                            <div className='photo'>
+                                <img
+                                    className='pfp'
+                                    src={
+                                        user.currentUser.PhotoURL
+                                            ? user.currentUser.PhotoURL
+                                            : defaultDP
+                                    }
+                                />
+                            </div>
+                            <h5 className='username app-font ms-3'>
                                 {user.currentUser && user.currentUser.Username}
                             </h5>
-                            <button
-                                className='btn btn-danger'
-                                onClick={() => logout()}>
-                                Logout
-                            </button>
                         </div>
+                        <button
+                            className='btn btn-danger'
+                            onClick={() => logout()}>
+                            Logout
+                        </button>
                     </div>
                 </div>
             ) : (

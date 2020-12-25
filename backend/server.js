@@ -23,8 +23,6 @@ io.on('connection', (socket) => {
     const id = socket.handshake.query.id;
     socket.join(id);
 
-    console.log('here');
-
     socket.on('send-message', ({ recipient, message, date }) => {
         socket.broadcast.to(recipient).emit('recieve-message', {
             sender: id,

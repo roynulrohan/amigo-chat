@@ -4,9 +4,35 @@ const router = express.Router();
 const User = require('../models/User');
 const UserSession = require('../models/UserSession');
 
+router.route('/getPhoto').get(function (req, res, next) {
+    const { query } = req;
+    const { username } = query;
+
+    User.findOne(
+        {
+            Username: username,
+        },
+        (err, user) => {
+            if (err) {
+                console.log(err);
+                return res.send({
+                    success: false,
+                    message: 'Error: Server error',
+                });
+            }
+
+            return res.send({
+                success: true,
+                message: 'Error: Server error',
+                result: user.PhotoURL,
+            });
+        }
+    );
+});
+
 router.route('/update').put(function (req, res) {
     const { body } = req;
-    const { username, addContact, deleteContact } = body;
+    const { username, addContact, deleteContact, photoURL } = body;
 
     let params = {};
 
@@ -22,6 +48,10 @@ router.route('/update').put(function (req, res) {
 
     if (deleteContact) {
         params = { $pull: { Contacts: deleteContact } };
+    }
+
+    if (photoURL) {
+        params = { PhotoURL: photoURL };
     }
 
     if (addContact) {
@@ -70,6 +100,27 @@ router.route('/update').put(function (req, res) {
             params,
             { new: true, upsert: true },
             function (err, result) {
+                if (err) {
+                    console.log(err);
+                    res.send({
+                        success: false,
+                        message: 'Server error.',
+                    });
+                } else {
+                    res.send({
+                        success: true,
+                        result: result,
+                    });
+                }
+            }
+        );
+    } else if (photoURL) {
+        User.findOneAndUpdate(
+            { Username: username },
+            params,
+            { new: true, upsert: true },
+            function (err, result) {
+                console.log(result);
                 if (err) {
                     console.log(err);
                     res.send({

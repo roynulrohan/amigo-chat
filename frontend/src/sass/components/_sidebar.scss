@@ -14,14 +14,19 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        min-height: 7% !important;
+        min-height: 6% !important;
     }
 
     .footer {
         background-color: rgba(22, 22, 22, 0.288);
         margin-top: auto;
-        height: 10% !important;
-        min-height: 10% !important;
+        height: 10vh !important;
+        min-height: 10vh !important;
+
+        .photo {
+            height: 50px;
+            width: 50px;
+        }
     }
 
     .nav-item {
