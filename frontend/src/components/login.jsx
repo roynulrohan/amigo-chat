@@ -38,23 +38,33 @@ const Login = () => {
                 username: username,
                 password: password,
             }),
-        }).then((res) => {
-            if (res.data.success) {
-                // write token to storage
-                setInStorage('amigo-chat_roynulrohan', {
-                    token: res.data.token,
-                });
+            timeout: 10000,
+        })
+            .then((res) => {
+                if (res.data.success) {
+                    setTimeout(() => {
+                        // write token to storage
+                        setInStorage('amigo-chat_roynulrohan', {
+                            token: res.data.token,
+                        });
+
+                        // dispatch user to redux and redirect
+                        dispatch(setUser(res.data.user));
+                        setLoading(false);
+
+                        setTimeout(() => {
+                            history.push('/');
+                        }, 1250);
+                    }, 1000);
+                } else {
+                    setErrorMessage(res.data.message);
+                    setLoading(false);
+                }
+            })
+            .catch((err) => {
+                setErrorMessage(err.toString());
                 setLoading(false);
-                // dispatch user to redux and redirect
-                dispatch(setUser(res.data.user));
-                setTimeout(() => {
-                    history.push('/');
-                }, 1700);
-            } else {
-                setErrorMessage(res.data.message);
-            }
-            setLoading(false);
-        });
+            });
     };
 
     const formContainer = () => {

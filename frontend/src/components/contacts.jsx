@@ -56,7 +56,11 @@ const Contacts = () => {
         });
     };
 
-    const addSubmit = () => {
+    const addContact = () => {
+        if (user.currentUser.Contacts.includes(formUsername)) {
+            setformError('User already added.');
+            return;
+        }
         // Post request to backend
         axios({
             method: 'put',
@@ -68,17 +72,24 @@ const Contacts = () => {
                 username: user.currentUser.Username,
                 addContact: formUsername,
             }),
-        }).then((res) => {
-            if (res.data.success) {
-                dispatch(setUser(res.data.result));
-                setContacts(res.data.result.Contacts);
-                setformError('');
-                setformUsername('');
-                toggleAddModal();
-            } else {
-                setformError(res.data.message);
-            }
-        });
+            timeout: 10000,
+        })
+            .then((res) => {
+                console.log('erer');
+                if (res.data.success) {
+                    dispatch(setUser(res.data.result));
+                    setContacts(res.data.result.Contacts);
+                    setformError('');
+                    setformUsername('');
+                    toggleAddModal();
+                } else {
+                    setformError(res.data.message);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+                setformError(err.toString());
+            });
     };
 
     const addModal = () => {
@@ -94,7 +105,8 @@ const Contacts = () => {
                     <Form
                         onSubmit={(e) => {
                             e.preventDefault();
-                            addSubmit();
+                            setformError('');
+                            addContact();
                         }}>
                         <Form.Group>
                             <Form.Label>Username</Form.Label>
@@ -111,12 +123,20 @@ const Contacts = () => {
                     <p className='text-danger mt-3'>{formError}</p>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button type='submit' variant='success'>
+                    <Button
+                        type='submit'
+                        variant='success'
+                        onClick={() => {
+                            setformError('');
+                            addContact();
+                        }}>
                         Submit
                     </Button>
                     <Button
                         variant='secondary'
                         onClick={() => {
+                            setformUsername('');
+                            setformError('');
                             toggleAddModal();
                         }}>
                         Cancel

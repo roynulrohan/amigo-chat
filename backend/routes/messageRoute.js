@@ -41,7 +41,6 @@ router.route('/').post(function (req, res) {
                         const date = recentMessage
                             ? recentMessage.DateCreated
                             : conversation.createdAt;
-                        console.log(conversation);
 
                         convoArr.push({
                             recipient: recipient,
