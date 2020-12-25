@@ -2,6 +2,6 @@ export const setUser = (payload) => {
     return { type: 'SET_USER', payload };
 };
 
-export const setMessages = (payload) => {
+export const setMessage = (payload) => {
     return { type: 'SET_MESSAGE', payload };
 };

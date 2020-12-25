@@ -19,6 +19,14 @@ const Login = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
+    useEffect(() => {
+        if (isRegistering) {
+            document.title = 'Amigo | Register';
+        } else {
+            document.title = 'Amigo | Login';
+        }
+    }, [isRegistering]);
+
     const formSubmit = (e) => {
         e.preventDefault();
 

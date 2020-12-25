@@ -34,17 +34,15 @@ function App() {
     }, []);
 
     return (
-        <div>
-            <Router>
-                <Route path='/' exact>
-                    <SocketProvider
-                        id={user.currentUser && user.currentUser.Username}>
-                        <Main />
-                    </SocketProvider>
-                </Route>
-                <Route path='/login' component={Login} />
-            </Router>
-        </div>
+        <Router>
+            <Route path='/' exact>
+                <SocketProvider
+                    id={user.currentUser && user.currentUser.Username}>
+                    <Main />
+                </SocketProvider>
+            </Route>
+            <Route path='/login' component={Login} />
+        </Router>
     );
 }
 

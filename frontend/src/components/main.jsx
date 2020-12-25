@@ -1,31 +1,95 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Chat from '../components/chat';
 import SideBar from '../components/sidebar';
-import { SocketProvider, useSocket } from '../contexts/SocketProvider';
+import { useSocket } from '../contexts/SocketProvider';
 import { useSelector, useDispatch } from 'react-redux';
-import { setMessages } from '../actions';
+import { setMessage } from '../actions';
+import { useHistory } from 'react-router-dom';
+import { CSSTransition } from 'react-transition-group';
 
 const Main = () => {
     const user = useSelector((state) => state.userReducer);
     const messageReducer = useSelector((state) => state.messageReducer);
     const dispatch = useDispatch();
+    const history = useHistory();
     const socket = useSocket();
+
+    useEffect(() => {
+        if (user.currentUser) {
+            document.title = 'Amigo | Home';
+        } else {
+            document.title = 'Amigo | Welcome';
+        }
+    }, [user]);
 
     useEffect(() => {
         if (socket == null) return;
 
         socket.on('recieve-message', (message) => {
-            dispatch(setMessages(message));
+            dispatch(setMessage(message));
         });
 
         return () => socket && socket.off('recieve-message');
     }, [socket, messageReducer]);
 
     return (
-        <div>
-            <SideBar />
-            <Chat />
-        </div>
+        <CSSTransition
+            in={true}
+            appear={true}
+            timeout={400}
+            classNames='fade'
+            unmountOnExit>
+            {user.currentUser ? (
+                <div>
+                    <SideBar />
+                    <Chat />
+                </div>
+            ) : (
+                <div>
+                    <div class='background'>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div className='main m-0 d-flex flex-column justify-content-center'>
+                        <div className='text-center'>
+                            <h1 className='app-font'>Welcome to</h1>
+                            <h1 className='app-title'>Amigo</h1>
+                            <h3 className='app-font mt-3 text-muted'>
+                                Online Chat
+                            </h3>
+                            <h5 className='app-font my-4 text-muted'>
+                                Login or Register to get started!
+                            </h5>
+                            <button
+                                className='btn btn-info'
+                                onClick={() => {
+                                    history.push('/login');
+                                }}>
+                                Continue
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </CSSTransition>
     );
 };
 

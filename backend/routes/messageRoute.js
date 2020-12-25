@@ -9,7 +9,10 @@ router.route('/').post(function (req, res) {
 
     if (Users.length === 1) {
         Conversation.find(
-            { Users: { $regex: Users[0], $options: 'i' } },
+            {
+                Users: { $regex: Users[0], $options: 'i' },
+                Messages: { $exists: true, $ne: [] },
+            },
             null,
             { sort: '-updatedAt' },
 

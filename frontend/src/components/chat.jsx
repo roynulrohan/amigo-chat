@@ -11,7 +11,6 @@ const Chat = () => {
     const user = useSelector((state) => state.userReducer);
     const messageReducer = useSelector((state) => state.messageReducer);
     const location = useLocation();
-    const history = useHistory();
     const [recipient, setRecipient] = useState('');
     const [messages, setMessages] = useState([]);
     const [chatInput, setChatInput] = useState('');
@@ -20,6 +19,12 @@ const Chat = () => {
     const socket = useSocket();
 
     useEffect(() => {
+        if (recipient) {
+            document.title = 'Amigo | ' + recipient;
+        } else {
+            document.title = 'Amigo | Home';
+        }
+
         if (user.currentUser && recipient) {
             axios({
                 method: 'post',
@@ -98,6 +103,8 @@ const Chat = () => {
                 message: chatInput,
                 date: Date.now(),
             });
+            
+            
 
             setSendButtonDisabled(true);
             axios({
@@ -204,57 +211,39 @@ const Chat = () => {
                         'chat d-flex flex-column justify-content-center align-items-center ' +
                         (user.currentUser ? '' : 'm-0')
                     }>
-                    {user.currentUser ? (
-                        <div className='text-center app-font prewrap'>
-                            <h2>
-                                Hello,
-                                <span className='app-title ms-3'>
-                                    {user.currentUser.Username}
+                    <div className='text-center app-font prewrap'>
+                        <h2>
+                            Hello,
+                            <span className='app-title ms-3'>
+                                {user.currentUser.Username}
+                            </span>
+                        </h2>
+                        <h5 className='text-muted mt-3'>
+                            {conversationCount !== 0 ? (
+                                <span>
+                                    {'You have ' +
+                                        conversationCount +
+                                        (conversationCount > 1
+                                            ? ' active conversations.\nClick on one to chat!'
+                                            : ' active conversation.\nClick on their card to chat!')}
                                 </span>
-                            </h2>
-                            <h5 className='text-muted mt-3'>
-                                {conversationCount !== 0 ? (
-                                    <span>
-                                        {'You have ' +
-                                            conversationCount +
-                                            (conversationCount > 1
-                                                ? ' active conversations.\nClick on one to chat!'
-                                                : ' active conversation.\nClick on their card to chat!')}
-                                    </span>
-                                ) : user.currentUser.Contacts.length !== 0 ? (
-                                    <span>
-                                        {'You have ' +
-                                            user.currentUser.Contacts.length +
-                                            (user.currentUser.Contacts.length >
-                                            1
-                                                ? ' contacts.\nClick on one to chat!'
-                                                : ' contact.\nClick on their card to chat!')}
-                                    </span>
-                                ) : (
-                                    <span>
-                                        {
-                                            'You have no contacts yet.\nHead over to the contacts tab to create one!'
-                                        }
-                                    </span>
-                                )}
-                            </h5>
-                        </div>
-                    ) : (
-                        <div className='text-center'>
-                            <h1 className='app-font'>Welcome to</h1>
-                            <h1 className='app-title'>Amigo</h1>
-                            <h5 className='app-font my-4 text-muted'>
-                                Login or Register to get started!
-                            </h5>
-                            <button
-                                className='btn btn-primary'
-                                onClick={() => {
-                                    history.push('/login');
-                                }}>
-                                Continue
-                            </button>
-                        </div>
-                    )}
+                            ) : user.currentUser.Contacts.length !== 0 ? (
+                                <span>
+                                    {'You have ' +
+                                        user.currentUser.Contacts.length +
+                                        (user.currentUser.Contacts.length > 1
+                                            ? ' contacts.\nClick on one to chat!'
+                                            : ' contact.\nClick on their card to chat!')}
+                                </span>
+                            ) : (
+                                <span>
+                                    {
+                                        'You have no contacts yet.\nHead over to the contacts tab to create one!'
+                                    }
+                                </span>
+                            )}
+                        </h5>
+                    </div>
                 </div>
             )}
         </CSSTransition>
