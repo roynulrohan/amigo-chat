@@ -3,12 +3,13 @@ import { getDate } from '../utils/DateFormat';
 import { useHistory } from 'react-router-dom';
 import { useSocket } from '../contexts/SocketProvider';
 import { useSelector } from 'react-redux';
+import { CSSTransition } from 'react-transition-group';
 import axios from 'axios';
 import '../sass/components/_conversations.scss';
 
 const Conversations = () => {
     const user = useSelector((state) => state.userReducer);
-    const [conversations, setConversations] = useState();
+    const [conversations, setConversations] = useState([]);
     const history = useHistory();
     const socket = useSocket();
 
@@ -33,39 +34,50 @@ const Conversations = () => {
     }, [user]);
 
     useEffect(() => {
-        if (socket) {
-            socket.on('recieve-message', (message) => {
-                if (conversations) {
-                    let search = conversations.find((conversation) => {
-                        return conversation.recipient === message.sender;
-                    });
+        if (socket == null) return;
 
-                    if (search) {
-                        let pos = conversations
-                            .map(function (e) {
-                                return e.recipient;
-                            })
-                            .indexOf(search.recipient);
+        console.log(socket);
 
-                        let copy = [...conversations];
-                        let item = copy[pos];
-                        item.content = message.content;
-                        copy[pos] = item;
+        socket.on('recieve-message', (message) => {
+            if (conversations.length !== 0) {
+                let search = conversations.find((conversation) => {
+                    return conversation.recipient === message.sender;
+                });
 
-                        setConversations(copy);
-                    } else {
-                        setConversations((conversations) => [
-                            {
-                                recipient: message.sender,
-                                content: message.content,
-                                date: message.date,
-                            },
-                            ...conversations,
-                        ]);
-                    }
+                if (search) {
+                    let pos = conversations
+                        .map(function (e) {
+                            return e.recipient;
+                        })
+                        .indexOf(search.recipient);
+
+                    let copy = [...conversations];
+                    let item = copy[pos];
+                    item.content = message.content;
+                    copy[pos] = item;
+
+                    setConversations(copy);
+                } else {
+                    setConversations((conversations) => [
+                        {
+                            recipient: message.sender,
+                            content: message.content,
+                            date: message.date,
+                        },
+                        ...conversations,
+                    ]);
                 }
-            });
-        }
+            } else {
+                setConversations((conversations) => [
+                    {
+                        recipient: message.sender,
+                        content: message.content,
+                        date: message.date,
+                    },
+                    ...conversations,
+                ]);
+            }
+        });
 
         return () => socket && socket.off('recieve-message');
     }, [socket, conversations]);
@@ -75,27 +87,34 @@ const Conversations = () => {
             {conversations && conversations.length !== 0 ? (
                 conversations.map((conversation) => {
                     return (
-                        <div
-                            key={'conversation-' + conversation.recipient}
-                            className='conversation p-3'
-                            onClick={() => {
-                                history.push({
-                                    pathname: '/',
-                                    recipient: conversation.recipient.trim(),
-                                });
-                            }}>
-                            <div className='d-flex justify-content-between align-items-start mb-1'>
-                                <h5 className='name'>
-                                    {conversation.recipient}
-                                </h5>
-                                <small className='date'>
-                                    {getDate(new Date(conversation.date))}
+                        <CSSTransition
+                            in={true}
+                            appear={true}
+                            timeout={400}
+                            classNames='fade'
+                            unmountOnExit>
+                            <div
+                                key={'conversation-' + conversation.recipient}
+                                className='conversation p-3'
+                                onClick={() => {
+                                    history.push({
+                                        pathname: '/',
+                                        recipient: conversation.recipient.trim(),
+                                    });
+                                }}>
+                                <div className='d-flex justify-content-between align-items-start mb-1'>
+                                    <h5 className='name'>
+                                        {conversation.recipient}
+                                    </h5>
+                                    <small className='date'>
+                                        {getDate(new Date(conversation.date))}
+                                    </small>
+                                </div>
+                                <small className='content'>
+                                    {conversation.content}
                                 </small>
                             </div>
-                            <small className='content'>
-                                {conversation.content}
-                            </small>
-                        </div>
+                        </CSSTransition>
                     );
                 })
             ) : (

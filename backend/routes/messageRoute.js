@@ -37,8 +37,8 @@ router.route('/').post(function (req, res) {
                                 conversation.Messages.length - 1
                             ];
 
-                        const content = recentMessage.Content;
-                        const date = recentMessage.DateCreated;
+                        const content = recentMessage && recentMessage.Content;
+                        const date = recentMessage && recentMessage.DateCreated;
 
                         convoArr.push({
                             recipient: recipient,

@@ -13,7 +13,7 @@ const Chat = () => {
     const [recipient, setRecipient] = useState('');
     const [messages, setMessages] = useState([]);
     const [chatInput, setChatInput] = useState('');
-
+    const [sendButtonDisabled, setSendButtonDisabled] = useState(false);
     const socket = useSocket();
 
     useEffect(() => {
@@ -84,6 +84,7 @@ const Chat = () => {
                 date: Date.now(),
             });
 
+            setSendButtonDisabled(true);
             axios({
                 method: 'post',
                 url: 'http://localhost:4000/message/update',
@@ -98,6 +99,10 @@ const Chat = () => {
                         DateCreated: Date.now(),
                     },
                 }),
+            }).then((res) => {
+                setTimeout(() => {
+                    setSendButtonDisabled(false);
+                }, 500);
             });
 
             setChatInput('');
@@ -125,7 +130,7 @@ const Chat = () => {
                             </span>
                         </h2>
                     </div>
-                    <div className='conversation d-flex flex-column-reverse px-4'>
+                    <div className='conversation d-flex flex-column-reverse px-4 py-2'>
                         {messages &&
                             messages.map((message, index) => {
                                 let hideTitle = false;
@@ -168,7 +173,10 @@ const Chat = () => {
                                 }}
                             />
                             <div class='input-group-append mx-2'>
-                                <button type='submit' class='btn btn-info'>
+                                <button
+                                    type='submit'
+                                    class='btn btn-info'
+                                    disabled={sendButtonDisabled}>
                                     Send
                                 </button>
                             </div>

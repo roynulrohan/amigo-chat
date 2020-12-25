@@ -4,7 +4,9 @@ import { getTime, getDate } from '../utils/DateFormat';
 
 const Message = ({ name, content, date, isMe, hideTitle }) => {
     return isMe ? (
-        <div className='message d-flex flex-column align-items-end'>
+        <div
+            className='message d-flex flex-column align-items-end'
+            title={getTime(new Date(date))}>
             {hideTitle ? (
                 <> </>
             ) : (
@@ -18,7 +20,9 @@ const Message = ({ name, content, date, isMe, hideTitle }) => {
             <h5 className='m-0'>{content}</h5>
         </div>
     ) : (
-        <div className='message d-flex flex-column'>
+        <div
+            className='message d-flex flex-column'
+            title={getTime(new Date(date))}>
             {hideTitle ? (
                 <> </>
             ) : (
