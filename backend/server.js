@@ -19,9 +19,14 @@ const io = require('socket.io')(server, {
     },
 });
 
+let allClients = [];
+
 io.on('connection', (socket) => {
     const id = socket.handshake.query.id;
     socket.join(id);
+
+    allClients.push(id);
+    io.emit('online-users', allClients);
 
     socket.on('send-message', ({ recipient, message, date }) => {
         socket.broadcast.to(recipient).emit('recieve-message', {
@@ -29,6 +34,13 @@ io.on('connection', (socket) => {
             content: message,
             date: date,
         });
+    });
+
+    socket.on('disconnect', function () {
+        let i = allClients.indexOf(socket.handshake.query.id);
+
+        allClients.splice(i, 1);
+        io.emit('online-users', allClients);
     });
 });
 
