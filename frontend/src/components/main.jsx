@@ -15,6 +15,7 @@ const Main = () => {
     const socket = useSocket();
 
     useEffect(() => {
+        console.log(user);
         if (user.currentUser) {
             document.title = 'Amigo | Home';
         } else {
@@ -46,11 +47,15 @@ const Main = () => {
             timeout={400}
             classNames='fade'
             unmountOnExit>
-            {user.currentUser ? (
-                <div>
-                    <SideBar />
-                    <Chat />
-                </div>
+            {user.currentUser !== undefined ? (
+                user.currentUser ? (
+                    <div>
+                        <SideBar />
+                        <Chat />
+                    </div>
+                ) : (
+                    <></>
+                )
             ) : (
                 <div>
                     <div class='background'>
