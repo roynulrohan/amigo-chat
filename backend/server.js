@@ -1,5 +1,6 @@
 const express = require('express');
 const app = require('express')();
+const dotenv = require('dotenv');
 const PORT = process.env.PORT || 4000;
 const path = require('path');
 const server = require('http').createServer(app);
@@ -9,7 +10,6 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
-const dotenv = require('dotenv');
 dotenv.config();
 
 const io = require('socket.io')(server, {
@@ -52,9 +52,6 @@ app.use('/message', messageRoute);
 
 app.use(express.static(path.join(__dirname, '../frontend/build')));
 app.get('*', (req, res) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'X-Requested-With');
-    next();
     console.log(__dirname);
     res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
 });
