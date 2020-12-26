@@ -4,17 +4,17 @@ import { useHistory } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import axios from 'axios';
 import defaultDP from '../assets/profile.png';
+import { useSelector } from 'react-redux';
 
 const RecentCard = ({ conversation }) => {
+    const onlineUsersReducer = useSelector((state) => state.clientsReducer);
     const [photoURL, setphotoURL] = useState('');
     const history = useHistory();
+    const [onlineStatus, setOnlineStatus] = useState(false);
 
     useEffect(() => {
         axios
-            .get(
-                '/user/getPhoto?username=' +
-                    conversation.recipient
-            )
+            .get('/user/getPhoto?username=' + conversation.recipient)
             .then((res) => {
                 if (res.data.success) {
                     setphotoURL(res.data.result);
@@ -25,6 +25,20 @@ const RecentCard = ({ conversation }) => {
             setphotoURL('');
         };
     }, []);
+    
+    useEffect(() => {
+        if (onlineUsersReducer.currentClients) {
+            setOnlineStatus(
+                onlineUsersReducer.currentClients.includes(
+                    conversation.recipient
+                )
+            );
+        }
+
+        return () => {
+            setOnlineStatus(false);
+        };
+    }, [onlineUsersReducer, conversation.recipient]);
 
     return (
         <CSSTransition
@@ -45,7 +59,12 @@ const RecentCard = ({ conversation }) => {
                 }}>
                 <div className='photo'>
                     <img
-                        className='pfp'
+                        className={
+                            'pfp ' +
+                            (onlineStatus
+                                ? 'ring-indicator-online'
+                                : 'ring-indicator-offline')
+                        }
                         src={photoURL ? photoURL : defaultDP}
                     />
                 </div>

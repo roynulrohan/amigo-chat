@@ -44,6 +44,16 @@ body {
     max-width: 100% !important;
 }
 
+.ring-indicator-online {
+    box-shadow: 0px 0px 1px 4px rgb(6, 167, 0);
+}
+
+.ring-indicator-offline {
+    box-shadow: 0px 0px 1px 4px rgb(182, 41, 65);
+}
+
+// PRESETS
+
 .pointer {
     cursor: pointer;
 }
