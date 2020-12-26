@@ -12,7 +12,7 @@ const RecentCard = ({ conversation }) => {
     useEffect(() => {
         axios
             .get(
-                'http://localhost:4000/user/getPhoto?username=' +
+                '/user/getPhoto?username=' +
                     conversation.recipient
             )
             .then((res) => {

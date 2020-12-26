@@ -20,7 +20,7 @@ const Conversations = () => {
         if (user.currentUser) {
             axios({
                 method: 'post',
-                url: 'http://localhost:4000/message/',
+                url: '/message/',
                 headers: {
                     'Content-Type': 'application/json',
                 },

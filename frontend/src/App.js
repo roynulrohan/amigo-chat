@@ -21,7 +21,7 @@ function App() {
             const { token } = obj;
 
             axios
-                .get('http://localhost:4000/user/verify?token=' + token)
+                .get('/user/verify?token=' + token)
                 .then((res) => {
                     if (res.data.success) {
                         // write user to redux store

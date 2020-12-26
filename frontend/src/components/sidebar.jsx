@@ -24,7 +24,7 @@ const SideBar = () => {
             const { token } = obj;
 
             axios
-                .post('http://localhost:4000/user/logout?token=' + token)
+                .post('/user/logout?token=' + token)
                 .then((res) => {
                     if (res.data.success) {
                         // remove user from redux store

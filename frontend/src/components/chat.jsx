@@ -30,7 +30,7 @@ const Chat = () => {
         if (user.currentUser && recipient) {
             axios({
                 method: 'post',
-                url: 'http://localhost:4000/message/',
+                url: '/message/',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -47,7 +47,7 @@ const Chat = () => {
         if (user.currentUser && !recipient) {
             axios({
                 method: 'post',
-                url: 'http://localhost:4000/message/',
+                url: '/message/',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -118,7 +118,7 @@ const Chat = () => {
             setSendButtonDisabled(true);
             axios({
                 method: 'post',
-                url: 'http://localhost:4000/message/update',
+                url: '/message/update',
                 headers: {
                     'Content-Type': 'application/json',
                 },

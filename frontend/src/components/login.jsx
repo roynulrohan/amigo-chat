@@ -45,8 +45,8 @@ const Login = () => {
         axios({
             method: 'post',
             url: isRegistering
-                ? 'http://localhost:4000/user/register'
-                : 'http://localhost:4000/user/login',
+                ? '/user/register'
+                : '/user/login',
             headers: {
                 'Content-Type': 'application/json',
             },

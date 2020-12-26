@@ -11,7 +11,7 @@ export function SocketProvider({ id, children }) {
     const [socket, setSocket] = useState();
 
     useEffect(() => {
-        const newSocket = io('http://localhost:4000', {
+        const newSocket = io({
             query: { id },
             'force new connection': true,
             reconnectionAttempts: 'Infinity',

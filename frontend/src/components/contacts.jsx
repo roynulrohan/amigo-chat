@@ -45,7 +45,7 @@ const Contacts = () => {
         // Post request to backend
         axios({
             method: 'put',
-            url: 'http://localhost:4000/user/update',
+            url: '/user/update',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -76,7 +76,7 @@ const Contacts = () => {
         // Post request to backend
         axios({
             method: 'put',
-            url: 'http://localhost:4000/user/update',
+            url: '/user/update',
             headers: {
                 'Content-Type': 'application/json',
             },

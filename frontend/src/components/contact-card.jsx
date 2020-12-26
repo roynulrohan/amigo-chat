@@ -10,7 +10,7 @@ const ContactCard = ({ username, toDeleteCallback }) => {
 
     useEffect(() => {
         axios
-            .get('http://localhost:4000/user/getPhoto?username=' + username)
+            .get('/user/getPhoto?username=' + username)
             .then((res) => {
                 if (res.data.success) {
                     setphotoURL(res.data.result);
