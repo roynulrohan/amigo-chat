@@ -1,36 +1,36 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../sass/components/_message.scss';
-import { getTime, getDate } from '../utils/DateFormat';
 
 const Message = ({ name, content, date, isMe, hideTitle }) => {
+    const [dateString, setDateString] = useState('');
+    const dateFormat = require('dateformat');
+
+    useEffect(() => {
+        setDateString(dateFormat(date, 'shortTime'));
+    }, []);
+
     return isMe ? (
         <div
             className='message d-flex flex-column align-items-end'
-            title={getTime(new Date(date))}>
+            title={dateString}>
             {hideTitle ? (
                 <> </>
             ) : (
                 <small>
-                    <span className='date'>
-                        {getTime(new Date(date)) + ' - '}
-                    </span>
+                    <span className='date'>{dateString + ' - '}</span>
                     <span className='text-info'>You</span>
                 </small>
             )}
             <h5 className='m-0'>{content}</h5>
         </div>
     ) : (
-        <div
-            className='message d-flex flex-column'
-            title={getTime(new Date(date))}>
+        <div className='message d-flex flex-column' title={dateString}>
             {hideTitle ? (
                 <> </>
             ) : (
                 <small>
                     <span className='name'>{name}</span>
-                    <span className='date'>
-                        {' - ' + getTime(new Date(date))}
-                    </span>
+                    <span className='date'>{' - ' + dateString}</span>
                 </small>
             )}
             <h5 className='m-0'>{content}</h5>

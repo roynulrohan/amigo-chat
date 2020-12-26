@@ -9,6 +9,7 @@ const Conversations = () => {
     const user = useSelector((state) => state.userReducer);
     const messageReducer = useSelector((state) => state.messageReducer);
     const [conversations, setConversations] = useState([]);
+    const dateFormat = require('dateformat');
 
     useEffect(() => {
         return () => {
@@ -36,7 +37,6 @@ const Conversations = () => {
     }, [user]);
 
     useEffect(() => {
-        console.log(messageReducer.currentMessage);
         if (messageReducer.currentMessage) {
             if (conversations.length !== 0) {
                 let search = conversations.find((conversation) => {
@@ -56,8 +56,8 @@ const Conversations = () => {
                     let copy = [...conversations];
                     let item = copy[pos];
                     item.content = messageReducer.currentMessage.content;
+                    item.date = messageReducer.currentMessage.date;
                     copy[pos] = item;
-
                     setConversations(copy);
                 } else {
                     setConversations((conversations) => [

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getDate } from '../utils/DateFormat';
+
 import { useHistory } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import axios from 'axios';
@@ -11,6 +11,8 @@ const RecentCard = ({ conversation }) => {
     const [photoURL, setphotoURL] = useState('');
     const history = useHistory();
     const [onlineStatus, setOnlineStatus] = useState(false);
+    const [dateString, setDateString] = useState('');
+    const dateFormat = require('dateformat');
 
     useEffect(() => {
         axios
@@ -25,7 +27,11 @@ const RecentCard = ({ conversation }) => {
             setphotoURL('');
         };
     }, []);
-    
+
+    useEffect(() => {
+        setDateString(dateFormat(conversation.date, 'shortTime'));
+    }, [conversation.date]);
+
     useEffect(() => {
         if (onlineUsersReducer.currentClients) {
             setOnlineStatus(
@@ -72,7 +78,7 @@ const RecentCard = ({ conversation }) => {
                     <div className='d-flex justify-content-between'>
                         <h5 className='name'>{conversation.recipient}</h5>
                         <small className='ms-auto me-0 date'>
-                            {getDate(new Date(conversation.date))}
+                            {dateString}
                         </small>
                     </div>
                     <small className='content'>{conversation.content}</small>
