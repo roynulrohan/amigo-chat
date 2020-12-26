@@ -11,9 +11,11 @@ import { setMessage } from '../actions';
 const Chat = () => {
     const user = useSelector((state) => state.userReducer);
     const messageReducer = useSelector((state) => state.messageReducer);
+    const onlineUsersReducer = useSelector((state) => state.clientsReducer);
     const dispatch = useDispatch();
     const location = useLocation();
     const [recipient, setRecipient] = useState('');
+    const [recipientStatus, setRecipientStatus] = useState(false);
     const [messages, setMessages] = useState([]);
     const [chatInput, setChatInput] = useState('');
     const [sendButtonDisabled, setSendButtonDisabled] = useState(false);
@@ -73,7 +75,22 @@ const Chat = () => {
     }, [location]);
 
     useEffect(() => {
-        if (messageReducer.currentMessage && !messageReducer.currentMessage.isMe) {
+        if (onlineUsersReducer.currentClients) {
+            setRecipientStatus(
+                onlineUsersReducer.currentClients.includes(recipient)
+            );
+        }
+
+        return () => {
+            setRecipientStatus(false);
+        };
+    }, [onlineUsersReducer, recipient]);
+
+    useEffect(() => {
+        if (
+            messageReducer.currentMessage &&
+            !messageReducer.currentMessage.isMe
+        ) {
             setMessages((messages) => [
                 {
                     Username: messageReducer.currentMessage.sender,
@@ -155,8 +172,14 @@ const Chat = () => {
                             <span className='d-flex justify-content-center align-items-center badge rounded-pill bg-dark-accent'>
                                 <span>{recipient}</span>
                                 <span style={{ width: '2em' }}></span>
-                                <span className='badge rounded-pill bg-success'>
-                                    Online
+                                <span
+                                    className={
+                                        'badge rounded-pill ' +
+                                        (recipientStatus
+                                            ? 'bg-success'
+                                            : 'bg-danger')
+                                    }>
+                                    {recipientStatus ? 'Online' : 'Offline'}
                                 </span>
                             </span>
                         </h2>

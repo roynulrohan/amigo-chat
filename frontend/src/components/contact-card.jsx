@@ -3,20 +3,33 @@ import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import defaultDP from '../assets/profile.png';
 import { CSSTransition } from 'react-transition-group';
+import { useSelector } from 'react-redux';
 
 const ContactCard = ({ username, toDeleteCallback }) => {
+    const onlineUsersReducer = useSelector((state) => state.clientsReducer);
     const history = useHistory();
+    const [onlineStatus, setOnlineStatus] = useState(false);
     const [photoURL, setphotoURL] = useState('');
 
     useEffect(() => {
-        axios
-            .get('/user/getPhoto?username=' + username)
-            .then((res) => {
-                if (res.data.success) {
-                    setphotoURL(res.data.result);
-                }
-            });
+        axios.get('/user/getPhoto?username=' + username).then((res) => {
+            if (res.data.success) {
+                setphotoURL(res.data.result);
+            }
+        });
     }, []);
+
+    useEffect(() => {
+        if (onlineUsersReducer.currentClients) {
+            setOnlineStatus(
+                onlineUsersReducer.currentClients.includes(username)
+            );
+        }
+
+        return () => {
+            setOnlineStatus(false);
+        };
+    }, [onlineUsersReducer, username]);
 
     return (
         <CSSTransition
@@ -32,9 +45,13 @@ const ContactCard = ({ username, toDeleteCallback }) => {
                 <div className='d-flex align-items-center ps-2'>
                     <div className='photo'>
                         <img
-                            className='pfp'
-                            src={photoURL ? photoURL : defaultDP}
-                        />
+                            className={
+                                'pfp ' +
+                                (onlineStatus
+                                    ? 'ring-indicator-online'
+                                    : 'ring-indicator-offline')
+                            }
+                            src={photoURL ? photoURL : defaultDP}></img>
                     </div>
                     <h5 className='name ps-3'>{username}</h5>
                 </div>

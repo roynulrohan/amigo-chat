@@ -3,7 +3,7 @@ import Chat from '../components/chat';
 import SideBar from '../components/sidebar';
 import { useSocket } from '../contexts/SocketProvider';
 import { useSelector, useDispatch } from 'react-redux';
-import { setMessage } from '../actions';
+import { setMessage, setOnlineUsers } from '../actions';
 import { useHistory } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 
@@ -15,6 +15,7 @@ const Main = () => {
     const socket = useSocket();
 
     useEffect(() => {
+        console.log(user);
         if (user.currentUser) {
             document.title = 'Amigo | Home';
         } else {
@@ -29,7 +30,14 @@ const Main = () => {
             dispatch(setMessage(message));
         });
 
-        return () => socket && socket.off('recieve-message');
+        socket.on('online-users', (users) => {
+            dispatch(setOnlineUsers(users));
+        });
+
+        return () => {
+            socket && socket.off('recieve-message');
+            socket && socket.off('online-users');
+        };
     }, [socket, messageReducer]);
 
     return (
@@ -39,11 +47,15 @@ const Main = () => {
             timeout={400}
             classNames='fade'
             unmountOnExit>
-            {user.currentUser ? (
-                <div>
-                    <SideBar />
-                    <Chat />
-                </div>
+            {user.currentUser !== undefined ? (
+                user.currentUser ? (
+                    <div>
+                        <SideBar />
+                        <Chat />
+                    </div>
+                ) : (
+                    <></>
+                )
             ) : (
                 <div>
                     <div class='background'>
