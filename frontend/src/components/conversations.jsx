@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { getDate } from '../utils/DateFormat';
-import { useHistory } from 'react-router-dom';
-import { useSocket } from '../contexts/SocketProvider';
 import { useSelector } from 'react-redux';
 import { CSSTransition } from 'react-transition-group';
 import axios from 'axios';
 import '../sass/components/_conversations.scss';
+import RecentCard from './recent-card';
 
 const Conversations = () => {
     const user = useSelector((state) => state.userReducer);
     const messageReducer = useSelector((state) => state.messageReducer);
     const [conversations, setConversations] = useState([]);
-    const history = useHistory();
+
+    useEffect(() => {
+        return () => {
+            setConversations([]);
+        };
+    }, []);
 
     useEffect(() => {
         if (user.currentUser) {
@@ -83,37 +86,7 @@ const Conversations = () => {
         <div className='conversations'>
             {conversations && conversations.length !== 0 ? (
                 conversations.map((conversation) => {
-                    return (
-                        <CSSTransition
-                            in={true}
-                            appear={true}
-                            timeout={400}
-                            classNames='fade'
-                            unmountOnExit>
-                            <div
-                                title={'Open Conversation'}
-                                key={'conversation-' + conversation.recipient}
-                                className='conversation p-3'
-                                onClick={() => {
-                                    history.push({
-                                        pathname: '/',
-                                        recipient: conversation.recipient.trim(),
-                                    });
-                                }}>
-                                <div className='d-flex justify-content-between align-items-start mb-1'>
-                                    <h5 className='name'>
-                                        {conversation.recipient}
-                                    </h5>
-                                    <small className='date'>
-                                        {getDate(new Date(conversation.date))}
-                                    </small>
-                                </div>
-                                <small className='content'>
-                                    {conversation.content}
-                                </small>
-                            </div>
-                        </CSSTransition>
-                    );
+                    return <RecentCard conversation={conversation} />;
                 })
             ) : (
                 <div className='empty h-100 d-flex flex-column justify-content-center align-items-center'>

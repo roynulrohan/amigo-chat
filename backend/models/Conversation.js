@@ -11,6 +11,11 @@ const Conversation = new Schema(
             type: Array,
             default: [],
         },
+        expireAt: {
+            type: Date,
+            default: Date.now,
+            index: { expires: '5d' },
+        },
     },
     {
         timestamps: {
