@@ -185,8 +185,6 @@ const Chat = () => {
 
                                     newDay = daysBetween(new Date(message.DateCreated), new Date(messages[index + 1].DateCreated)) > 0;
                                 }
-                                console.log(new Date(message.DateCreated).getDate());
-                                console.log(new Date().getDate());
 
                                 return (
                                     <div>

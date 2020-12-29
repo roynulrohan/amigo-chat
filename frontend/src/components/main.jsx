@@ -15,7 +15,6 @@ const Main = () => {
     const socket = useSocket();
 
     useEffect(() => {
-        console.log(user);
         if (user.currentUser) {
             document.title = 'Amigo | Home';
         } else {

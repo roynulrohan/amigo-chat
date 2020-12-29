@@ -120,7 +120,6 @@ router.route('/update').put(function (req, res) {
             params,
             { new: true, upsert: true },
             function (err, result) {
-                console.log(result);
                 if (err) {
                     console.log(err);
                     res.send({

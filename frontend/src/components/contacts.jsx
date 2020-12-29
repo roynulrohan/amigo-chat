@@ -87,7 +87,6 @@ const Contacts = () => {
             timeout: 10000,
         })
             .then((res) => {
-                console.log('erer');
                 if (res.data.success) {
                     dispatch(setUser(res.data.result));
                     setContacts(res.data.result.Contacts);
