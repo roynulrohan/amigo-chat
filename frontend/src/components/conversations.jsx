@@ -89,7 +89,7 @@ const Conversations = () => {
                     return <RecentCard conversation={conversation} key={conversation.recipient} />;
                 })
             ) : (
-                <div className='empty h-100 d-flex flex-column justify-content-center align-items-center'>
+                <div className='empty text-center my-4'>
                     You have no conversations yet.
                 </div>
             )}
