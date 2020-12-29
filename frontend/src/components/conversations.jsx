@@ -86,7 +86,7 @@ const Conversations = () => {
         <div className='conversations'>
             {conversations && conversations.length !== 0 ? (
                 conversations.map((conversation) => {
-                    return <RecentCard conversation={conversation} />;
+                    return <RecentCard conversation={conversation} key={conversation.recipient} />;
                 })
             ) : (
                 <div className='empty h-100 d-flex flex-column justify-content-center align-items-center'>

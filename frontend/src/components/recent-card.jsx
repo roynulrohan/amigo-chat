@@ -26,7 +26,7 @@ const RecentCard = ({ conversation }) => {
         return () => {
             setphotoURL('');
         };
-    }, []);
+    }, [conversation.content]);
 
     useEffect(() => {
         setDateString(dateFormat(conversation.date, 'shortTime'));
