@@ -1,26 +1,10 @@
 @import '../custom';
 
 .contacts {
-    height: 80vh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     padding-top: 0.25rem;
-
-    .scrollable {
-        height: 75vh;
-        overflow-y: auto;
-    }
-
-    .scrollable::-webkit-scrollbar {
-        width: 10px;
-        background-color: $dark-accent;
-    }
-
-    .scrollable::-webkit-scrollbar-thumb {
-        background-color: rgb(26, 26, 26);
-        border-radius: 50rem;
-    }
 
     .add-button {
         flex-grow: 1;

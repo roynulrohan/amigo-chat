@@ -194,22 +194,6 @@ const Contacts = () => {
 
     return (
         <div className='contacts'>
-            <div className='scrollable'>
-                {contacts.length !== 0 ? (
-                    contacts.map((contact) => {
-                        return (
-                            <ContactCard
-                                username={contact}
-                                toDeleteCallback={deleteCallback}
-                            />
-                        );
-                    })
-                ) : (
-                    <div className='empty h-100 d-flex flex-column justify-content-center align-items-center'>
-                        You have no contacts yet.
-                    </div>
-                )}
-            </div>
             <div className='add-button d-flex align-items-stretch px-5 py-3'>
                 <button
                     title='New Contact'
@@ -218,6 +202,17 @@ const Contacts = () => {
                     New Contact
                 </button>
             </div>
+            <div className='list'>
+                {contacts.map((contact) => {
+                    return (
+                        <ContactCard
+                            username={contact}
+                            toDeleteCallback={deleteCallback}
+                        />
+                    );
+                })}
+            </div>
+
             {addModal()}
             {deleteModal()}
         </div>

@@ -23,15 +23,13 @@ const SideBar = () => {
         if (obj && obj.token) {
             const { token } = obj;
 
-            axios
-                .post('/user/logout?token=' + token)
-                .then((res) => {
-                    if (res.data.success) {
-                        // remove user from redux store
-                        dispatch(setUser());
-                        history.push('/login');
-                    }
-                });
+            axios.post('/user/logout?token=' + token).then((res) => {
+                if (res.data.success) {
+                    // remove user from redux store
+                    dispatch(setUser());
+                    history.push('/login');
+                }
+            });
         }
     };
 
@@ -43,7 +41,7 @@ const SideBar = () => {
             classNames='fade'
             unmountOnExit>
             {user.currentUser ? (
-                <div className='sidebar d-flex h-100 flex-column align-items-center'>
+                <div className='sidebar'>
                     <div className='header bg-dark-accent unselectable w-100 p-3'>
                         <h2
                             className='app-title pointer m-0'
@@ -123,7 +121,7 @@ const SideBar = () => {
                             </Nav.Item>
                         </Nav>
 
-                        <Tab.Content className='w-100 h-100'>
+                        <Tab.Content className='w-100'>
                             <Tab.Pane eventKey='chat'>
                                 <Conversations />
                             </Tab.Pane>
@@ -140,27 +138,30 @@ const SideBar = () => {
                             </Tab.Pane>
                         </Tab.Content>
                     </Tab.Container>
-                    <div className='footer w-100 d-flex align-items-center justify-content-between px-4'>
-                        <div className='d-flex align-items-center'>
-                            <div className='photo'>
-                                <img
-                                    className='pfp'
-                                    src={
-                                        user.currentUser.PhotoURL
-                                            ? user.currentUser.PhotoURL
-                                            : defaultDP
-                                    }
-                                />
+                    <div className='footer w-100 p-3 d-flex flex-column justify-content-center'>
+                        <div className='px-4 d-flex align-items-center justify-content-between'>
+                            <div className='d-flex align-items-center'>
+                                <div className='photo'>
+                                    <img
+                                        className='pfp'
+                                        src={
+                                            user.currentUser.PhotoURL
+                                                ? user.currentUser.PhotoURL
+                                                : defaultDP
+                                        }
+                                    />
+                                </div>
+                                <h5 className='username app-font ms-3'>
+                                    {user.currentUser &&
+                                        user.currentUser.Username}
+                                </h5>
                             </div>
-                            <h5 className='username app-font ms-3'>
-                                {user.currentUser && user.currentUser.Username}
-                            </h5>
+                            <button
+                                className='btn btn-danger'
+                                onClick={() => logout()}>
+                                Logout
+                            </button>
                         </div>
-                        <button
-                            className='btn btn-danger'
-                            onClick={() => logout()}>
-                            Logout
-                        </button>
                     </div>
                 </div>
             ) : (
