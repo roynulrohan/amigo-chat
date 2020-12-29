@@ -59,4 +59,27 @@
             transform: scale(0.9);
         }
     }
+
+    .separator {
+        color: $text-active;
+        margin-left: 3rem;
+        margin-right: 3rem;
+        display: flex;
+        align-items: center;
+        text-align: center;
+    }
+
+    .separator::before, .separator::after {
+        content: '';
+        flex: 1;
+        border-bottom: 3px solid $darkest;
+    }
+
+    .separator::before {
+        margin-right: 1rem;
+    }
+    
+    .separator::after {
+        margin-left: 1rem;
+    }
 }

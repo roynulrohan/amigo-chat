@@ -21,6 +21,7 @@ const Chat = () => {
     const [sendButtonDisabled, setSendButtonDisabled] = useState(false);
     const [conversationCount, setConversationCount] = useState(0);
     const socket = useSocket();
+    const dateFormat = require('dateformat');
 
     useEffect(() => {
         if (recipient) {
@@ -76,9 +77,7 @@ const Chat = () => {
 
     useEffect(() => {
         if (onlineUsersReducer.currentClients) {
-            setRecipientStatus(
-                onlineUsersReducer.currentClients.includes(recipient)
-            );
+            setRecipientStatus(onlineUsersReducer.currentClients.includes(recipient));
         }
 
         return () => {
@@ -87,10 +86,7 @@ const Chat = () => {
     }, [onlineUsersReducer, recipient]);
 
     useEffect(() => {
-        if (
-            messageReducer.currentMessage &&
-            !messageReducer.currentMessage.isMe
-        ) {
+        if (messageReducer.currentMessage && !messageReducer.currentMessage.isMe) {
             setMessages((messages) => [
                 {
                     Username: messageReducer.currentMessage.sender,
@@ -157,14 +153,12 @@ const Chat = () => {
         }
     };
 
+    const daysBetween = function (startDate, endDate) {
+        return Math.round(Math.abs((startDate.getTime() - endDate.getTime()) / (24 * 60 * 60 * 1000)));
+    };
+
     return (
-        <CSSTransition
-            in={true}
-            appear={true}
-            timeout={600}
-            classNames='fade'
-            unmountOnExit
-            key={recipient}>
+        <CSSTransition in={true} appear={true} timeout={600} classNames='fade' unmountOnExit key={recipient}>
             {recipient && user.currentUser ? (
                 <div className='chat h-100'>
                     <div className='header d-flex justify-content-center align-items-center w-100 p-3'>
@@ -172,13 +166,7 @@ const Chat = () => {
                             <span className='d-flex justify-content-center align-items-center badge rounded-pill bg-dark-accent'>
                                 <span>{recipient}</span>
                                 <span style={{ width: '2em' }}></span>
-                                <span
-                                    className={
-                                        'badge rounded-pill ' +
-                                        (recipientStatus
-                                            ? 'bg-success'
-                                            : 'bg-danger')
-                                    }>
+                                <span className={'badge rounded-pill ' + (recipientStatus ? 'bg-success' : 'bg-danger')}>
                                     {recipientStatus ? 'Online' : 'Offline'}
                                 </span>
                             </span>
@@ -188,27 +176,36 @@ const Chat = () => {
                         {messages &&
                             messages.map((message, index) => {
                                 let hideTitle = false;
+                                let newDay = true;
 
                                 if (messages[index + 1]) {
-                                    if (
-                                        message.Username ===
-                                        messages[index + 1].Username
-                                    ) {
+                                    if (message.Username === messages[index + 1].Username) {
                                         hideTitle = true;
                                     }
+
+                                    newDay = daysBetween(new Date(message.DateCreated), new Date(messages[index + 1].DateCreated)) > 0;
                                 }
+                                console.log(new Date(message.DateCreated).getDate());
+                                console.log(new Date().getDate());
+
                                 return (
-                                    <Message
-                                        key={message._id}
-                                        name={message.Username}
-                                        content={message.Content}
-                                        date={message.DateCreated}
-                                        isMe={
-                                            user.currentUser.Username ===
-                                            message.Username
-                                        }
-                                        hideTitle={hideTitle}
-                                    />
+                                    <div>
+                                        {newDay && (
+                                            <div class='separator'>
+                                                {new Date(message.DateCreated).getDate() === new Date().getDate()
+                                                    ? 'Today'
+                                                    : dateFormat(message.DateCreated, 'fullDate')}
+                                            </div>
+                                        )}
+                                        <Message
+                                            key={message.Username + message.Content + message.DateCreated}
+                                            name={message.Username}
+                                            content={message.Content}
+                                            date={message.DateCreated}
+                                            isMe={user.currentUser.Username === message.Username}
+                                            hideTitle={hideTitle}
+                                        />
+                                    </div>
                                 );
                             })}
                     </div>
@@ -227,10 +224,7 @@ const Chat = () => {
                                 }}
                             />
                             <div class='input-group-append mx-2'>
-                                <button
-                                    type='submit'
-                                    class='btn btn-info'
-                                    disabled={sendButtonDisabled}>
+                                <button type='submit' class='btn btn-info' disabled={sendButtonDisabled}>
                                     Send
                                 </button>
                             </div>
@@ -238,17 +232,11 @@ const Chat = () => {
                     </div>
                 </div>
             ) : (
-                <div
-                    className={
-                        'chat d-flex flex-column justify-content-center align-items-center ' +
-                        (user.currentUser ? '' : 'm-0')
-                    }>
+                <div className={'chat d-flex flex-column justify-content-center align-items-center ' + (user.currentUser ? '' : 'm-0')}>
                     <div className='text-center app-font prewrap'>
                         <h2>
                             Hello,
-                            <span className='app-title ms-3'>
-                                {user.currentUser.Username}
-                            </span>
+                            <span className='app-title ms-3'>{user.currentUser.Username}</span>
                         </h2>
                         <h5 className='text-muted mt-3'>
                             {conversationCount !== 0 ? (
@@ -268,11 +256,7 @@ const Chat = () => {
                                             : ' contact.\nClick on their card to chat!')}
                                 </span>
                             ) : (
-                                <span>
-                                    {
-                                        'You have no contacts yet.\nHead over to the contacts tab to create one!'
-                                    }
-                                </span>
+                                <span>{'You have no contacts yet.\nHead over to the contacts tab to create one!'}</span>
                             )}
                         </h5>
                     </div>

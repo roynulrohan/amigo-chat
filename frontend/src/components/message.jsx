@@ -12,7 +12,11 @@ const Message = ({ name, content, date, isMe, hideTitle }) => {
     return isMe ? (
         <div
             className='message d-flex flex-column align-items-end'
-            title={dateString}>
+            title={
+                dateFormat(date, 'shortTime') +
+                ' - ' +
+                dateFormat(date, 'longDate')
+            }>
             {hideTitle ? (
                 <> </>
             ) : (
@@ -24,7 +28,13 @@ const Message = ({ name, content, date, isMe, hideTitle }) => {
             <h5 className='m-0'>{content}</h5>
         </div>
     ) : (
-        <div className='message d-flex flex-column' title={dateString}>
+        <div
+            className='message d-flex flex-column'
+            title={
+                dateFormat(date, 'shortTime') +
+                ' - ' +
+                dateFormat(date, 'longDate')
+            }>
             {hideTitle ? (
                 <> </>
             ) : (
