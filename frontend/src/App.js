@@ -30,6 +30,8 @@ function App() {
                         dispatch(setUser());
                     }
                 });
+        } else {
+            dispatch(setUser());
         }
     }, []);
 
