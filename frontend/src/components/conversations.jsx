@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { CSSTransition } from 'react-transition-group';
 import axios from 'axios';
 import '../sass/components/_conversations.scss';
 import RecentCard from './recent-card';
@@ -9,13 +8,6 @@ const Conversations = () => {
     const user = useSelector((state) => state.userReducer);
     const messageReducer = useSelector((state) => state.messageReducer);
     const [conversations, setConversations] = useState([]);
-    const dateFormat = require('dateformat');
-
-    useEffect(() => {
-        return () => {
-            setConversations([]);
-        };
-    }, []);
 
     useEffect(() => {
         if (user.currentUser) {
@@ -79,6 +71,10 @@ const Conversations = () => {
                     ...conversations,
                 ]);
             }
+        }
+
+        return {
+            setConversations([])
         }
     }, [messageReducer]);
 
