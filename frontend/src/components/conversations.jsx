@@ -10,6 +10,12 @@ const Conversations = () => {
     const [conversations, setConversations] = useState([]);
 
     useEffect(() => {
+        return () => {
+            setConversations([]);
+        };
+    }, []);
+
+    useEffect(() => {
         if (user.currentUser) {
             axios({
                 method: 'post',
@@ -32,10 +38,7 @@ const Conversations = () => {
         if (messageReducer.currentMessage) {
             if (conversations.length !== 0) {
                 let search = conversations.find((conversation) => {
-                    return (
-                        conversation.recipient ===
-                        messageReducer.currentMessage.sender
-                    );
+                    return conversation.recipient === messageReducer.currentMessage.sender;
                 });
 
                 if (search) {
@@ -72,10 +75,6 @@ const Conversations = () => {
                 ]);
             }
         }
-
-        return {
-            setConversations([])
-        }
     }, [messageReducer]);
 
     return (
@@ -85,9 +84,7 @@ const Conversations = () => {
                     return <RecentCard conversation={conversation} key={conversation.recipient} />;
                 })
             ) : (
-                <div className='empty text-center my-4'>
-                    You have no conversations yet.
-                </div>
+                <div className='empty text-center my-4'>You have no conversations yet.</div>
             )}
         </div>
     );
