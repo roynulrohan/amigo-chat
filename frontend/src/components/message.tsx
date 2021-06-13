@@ -1,7 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import '../sass/components/_message.scss';
 
-const Message = ({ name, content, date, isMe, hideTitle }) => {
+interface Props {
+    name: string;
+    content: string;
+    date: Date;
+    isMe: boolean;
+    hideTitle: boolean;
+}
+
+const Message = ({ name, content, date, isMe, hideTitle }: Props) => {
     const [dateString, setDateString] = useState('');
     const dateFormat = require('dateformat');
 
@@ -12,11 +20,8 @@ const Message = ({ name, content, date, isMe, hideTitle }) => {
     return isMe ? (
         <div
             className='message d-flex flex-column align-items-end'
-            title={
-                dateFormat(date, 'shortTime') +
-                ' - ' +
-                dateFormat(date, 'longDate')
-            }>
+            title={dateFormat(date, 'shortTime') + ' - ' + dateFormat(date, 'longDate')}
+        >
             {hideTitle ? (
                 <> </>
             ) : (
@@ -28,13 +33,7 @@ const Message = ({ name, content, date, isMe, hideTitle }) => {
             <h5 className='m-0'>{content}</h5>
         </div>
     ) : (
-        <div
-            className='message d-flex flex-column'
-            title={
-                dateFormat(date, 'shortTime') +
-                ' - ' +
-                dateFormat(date, 'longDate')
-            }>
+        <div className='message d-flex flex-column' title={dateFormat(date, 'shortTime') + ' - ' + dateFormat(date, 'longDate')}>
             {hideTitle ? (
                 <> </>
             ) : (

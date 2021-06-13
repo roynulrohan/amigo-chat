@@ -1,13 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import '../sass/components/_conversations.scss';
 import RecentCard from './recent-card';
+import { RootState } from '../types';
+
+interface Conversation {
+    recipient: string;
+    content: Object;
+    date: Date;
+}
 
 const Conversations = () => {
-    const user = useSelector((state) => state.userReducer);
-    const messageReducer = useSelector((state) => state.messageReducer);
-    const [conversations, setConversations] = useState([]);
+    const user = useSelector((state: RootState) => state.userReducer);
+    const messageReducer = useSelector((state: RootState) => state.messageReducer);
+    const [conversations, setConversations] = useState<Array<Conversation>>([]);
 
     useEffect(() => {
         return () => {
@@ -37,19 +44,19 @@ const Conversations = () => {
     useEffect(() => {
         if (messageReducer.currentMessage) {
             if (conversations.length !== 0) {
-                let search = conversations.find((conversation) => {
+                const search = conversations.find((conversation: Conversation) => {
                     return conversation.recipient === messageReducer.currentMessage.sender;
                 });
 
                 if (search) {
                     let pos = conversations
-                        .map(function (e) {
-                            return e.recipient;
+                        .map((conversation: Conversation) => {
+                            return conversation.recipient;
                         })
                         .indexOf(search.recipient);
 
-                    let copy = [...conversations];
-                    let item = copy[pos];
+                    let copy: any = [...conversations];
+                    let item: any = copy[pos];
                     item.content = messageReducer.currentMessage.content;
                     item.date = messageReducer.currentMessage.date;
                     copy[pos] = item;

@@ -2,7 +2,12 @@ const defaultState = {
     currentMessage: '',
 };
 
-function messageReducer(state = defaultState, action) {
+interface Action {
+    type: string;
+    payload: Object;
+}
+
+function messageReducer(state = defaultState, action: Action) {
     switch (action.type) {
         case 'SET_MESSAGE':
             return {

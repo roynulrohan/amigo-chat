@@ -1,6 +1,6 @@
 // local storage
 
-export function getFromStorage(key) {
+export function getFromStorage(key: string) {
     if (!key) {
         return null;
     }
@@ -15,7 +15,7 @@ export function getFromStorage(key) {
     }
 }
 
-export function setInStorage(key, obj) {
+export function setInStorage(key: string, obj: Object) {
     if (!key) {
         console.error('Error: Key is missing');
     }

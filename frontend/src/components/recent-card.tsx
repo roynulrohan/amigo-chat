@@ -5,9 +5,20 @@ import { CSSTransition } from 'react-transition-group';
 import axios from 'axios';
 import defaultDP from '../assets/profile.png';
 import { useSelector } from 'react-redux';
+import { RootState } from '../types';
 
-const RecentCard = ({ conversation }) => {
-    const onlineUsersReducer = useSelector((state) => state.clientsReducer);
+interface Props {
+    conversation: Conversation;
+}
+
+interface Conversation {
+    recipient: string;
+    content: Object;
+    date: Date;
+}
+
+const RecentCard = ({ conversation }: Props) => {
+    const onlineUsersReducer = useSelector((state: RootState) => state.clientsReducer);
     const [photoURL, setphotoURL] = useState('');
     const history = useHistory();
     const [onlineStatus, setOnlineStatus] = useState(false);
@@ -43,16 +54,24 @@ const RecentCard = ({ conversation }) => {
     }, [onlineUsersReducer, conversation.recipient]);
 
     return (
-        <CSSTransition in={true} appear={true} timeout={400} classNames='fade' key={'conversation-' + conversation.recipient} unmountOnExit>
+        <CSSTransition
+            in={true}
+            appear={true}
+            timeout={400}
+            classNames='fade'
+            key={'conversation-' + conversation.recipient}
+            unmountOnExit
+        >
             <div
                 title={'Open Conversation'}
                 className='conversation d-flex p-3'
                 onClick={() => {
                     history.push({
                         pathname: '/',
-                        recipient: conversation.recipient.trim(),
+                        state: { recipient: conversation.recipient.trim() },
                     });
-                }}>
+                }}
+            >
                 <div className='photo'>
                     <img
                         className={'pfp ' + (onlineStatus ? 'ring-indicator-online' : 'ring-indicator-offline')}

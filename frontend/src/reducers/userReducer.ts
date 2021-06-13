@@ -2,7 +2,12 @@ const defaultState = {
     currentUser: '',
 };
 
-function userReducer(state = defaultState, action) {
+interface Action {
+    type: string;
+    payload: Object;
+}
+
+function userReducer(state = defaultState, action: Action) {
     switch (action.type) {
         case 'SET_USER':
             return {

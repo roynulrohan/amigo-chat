@@ -9,13 +9,26 @@ import '../sass/components/_login.scss';
 import loadingSVG from '../assets/loading_spin.svg';
 import doneIcon from '../assets/checked.png';
 
+interface RootState {
+    userReducer: User;
+}
+
+interface User {
+    currentUser: CurrentUser;
+}
+
+interface CurrentUser {
+    Username: string;
+    PhotoURL: string;
+}
+
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isRegistering, setIsRegistering] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [loading, setLoading] = useState(false);
-    const user = useSelector((state) => state.userReducer);
+    const user = useSelector((state: RootState) => state.userReducer);
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -35,7 +48,7 @@ const Login = () => {
         }
     };
 
-    const formSubmit = (e) => {
+    const formSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
         setLoading(true);
@@ -44,9 +57,7 @@ const Login = () => {
 
         axios({
             method: 'post',
-            url: isRegistering
-                ? '/user/register'
-                : '/user/login',
+            url: isRegistering ? '/user/register' : '/user/login',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -88,16 +99,14 @@ const Login = () => {
             <form className='form rounded p-4' onSubmit={formSubmit}>
                 <div className='d-flex flex-column'>
                     <h2 className='app-title mb-3 unselectable'>Amigo</h2>
-                    <div class='form-group mb-3'>
-                        <label
-                            for='usernameInput'
-                            className='mb-2 d-flex justify-content-between align-items-center'>
+                    <div className='form-group mb-3'>
+                        <label htmlFor='usernameInput' className='mb-2 d-flex justify-content-between align-items-center'>
                             Username
                             {isRegistering && validUsername()}
                         </label>
                         <input
                             type='name'
-                            class='form-control'
+                            className='form-control'
                             id='usernameInput'
                             placeholder='Enter username'
                             value={username}
@@ -106,13 +115,13 @@ const Login = () => {
                             }}
                         />
                     </div>
-                    <div class='form-group'>
-                        <label for='passwordInput' className='mb-2'>
+                    <div className='form-group'>
+                        <label htmlFor='passwordInput' className='mb-2'>
                             Password
                         </label>
                         <input
                             type='password'
-                            class='form-control'
+                            className='form-control'
                             id='passwordInput'
                             placeholder='Enter password'
                             value={password}
@@ -123,21 +132,18 @@ const Login = () => {
                     </div>
                 </div>
                 <div className='d-flex flex-column unselectable'>
-                    <small className='mb-5 mx-1 text-danger'>
-                        {errorMessage}
-                    </small>
+                    <small className='mb-5 mx-1 text-danger'>{errorMessage}</small>
                     <p className='mb-4 mx-1'>
-                        {isRegistering
-                            ? 'Already have an account?'
-                            : "Don't have an account?"}{' '}
+                        {isRegistering ? 'Already have an account?' : "Don't have an account?"}{' '}
                         <a
                             onClick={() => {
                                 setIsRegistering(!isRegistering);
-                            }}>
+                            }}
+                        >
                             {isRegistering ? 'Login' : 'Register'}
                         </a>
                     </p>
-                    <button type='submit' class='btn'>
+                    <button type='submit' className='btn'>
                         {isRegistering ? 'Sign Up' : 'Sign In'}
                     </button>
                 </div>
@@ -158,16 +164,15 @@ const Login = () => {
             <div className='form d-flex flex-column justify-content-center align-items-center text-center'>
                 <div className='app-font mb-5'>
                     <h5>Logged in as</h5>
-                    <h2 className='app-title mt-3'>
-                        {user.currentUser.Username}
-                    </h2>
+                    <h2 className='app-title mt-3'>{user.currentUser.Username}</h2>
                 </div>
                 <img className='success-img' src={doneIcon}></img>
                 <button
                     className='btn btn-info mt-5'
                     onClick={() => {
                         history.push('/');
-                    }}>
+                    }}
+                >
                     Continue
                 </button>
             </div>
@@ -175,14 +180,9 @@ const Login = () => {
     };
 
     return (
-        <CSSTransition
-            in={true}
-            appear={true}
-            timeout={400}
-            classNames='fade'
-            unmountOnExit>
+        <CSSTransition in={true} appear={true} timeout={400} classNames='fade' unmountOnExit>
             <div className='login'>
-                <div class='background'>
+                <div className='background'>
                     <span></span>
                     <span></span>
                     <span></span>
@@ -205,11 +205,7 @@ const Login = () => {
                     <span></span>
                 </div>
 
-                {loading
-                    ? loadingContainer()
-                    : user.currentUser
-                    ? successContainer()
-                    : formContainer()}
+                {loading ? loadingContainer() : user.currentUser ? successContainer() : formContainer()}
             </div>
         </CSSTransition>
     );

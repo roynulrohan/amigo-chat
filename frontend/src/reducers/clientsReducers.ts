@@ -2,7 +2,12 @@ const defaultState = {
     currentClients: [],
 };
 
-function clientsReducer(state = defaultState, action) {
+interface Action {
+    type: string;
+    payload: Object;
+}
+
+function clientsReducer(state = defaultState, action: Action) {
     switch (action.type) {
         case 'SET_ONLINE_USERS':
             return {

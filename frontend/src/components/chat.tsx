@@ -7,20 +7,31 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { setMessage } from '../actions';
+import { RootState } from '../types';
+
+type LocationState = {
+    recipient: string;
+};
+
+interface Message {
+    Username: string;
+    Content: string;
+    DateCreated: Date;
+}
 
 const Chat = () => {
-    const user = useSelector((state) => state.userReducer);
-    const messageReducer = useSelector((state) => state.messageReducer);
-    const onlineUsersReducer = useSelector((state) => state.clientsReducer);
+    const user = useSelector((state: RootState) => state.userReducer);
+    const messageReducer = useSelector((state: RootState) => state.messageReducer);
+    const onlineUsersReducer = useSelector((state: RootState) => state.clientsReducer);
     const dispatch = useDispatch();
-    const location = useLocation();
+    const location = useLocation<LocationState>();
     const [recipient, setRecipient] = useState('');
     const [recipientStatus, setRecipientStatus] = useState(false);
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState<Array<Message>>([]);
     const [chatInput, setChatInput] = useState('');
     const [sendButtonDisabled, setSendButtonDisabled] = useState(false);
     const [conversationCount, setConversationCount] = useState(0);
-    const socket = useSocket();
+    const socket: any = useSocket();
     const dateFormat = require('dateformat');
 
     useEffect(() => {
@@ -71,7 +82,7 @@ const Chat = () => {
 
     useEffect(() => {
         if (location) {
-            setRecipient(location.recipient);
+            setRecipient(location.state?.recipient);
         }
     }, [location]);
 
@@ -100,7 +111,7 @@ const Chat = () => {
         return () => socket && socket.off('recieve-message');
     }, [messageReducer]);
 
-    const messageSend = (e) => {
+    const messageSend = (e: React.FormEvent) => {
         e.preventDefault();
 
         if (chatInput) {
@@ -153,7 +164,7 @@ const Chat = () => {
         }
     };
 
-    const daysBetween = function (startDate, endDate) {
+    const daysBetween = function (startDate: Date, endDate: Date) {
         return Math.round(Math.abs((startDate.getTime() - endDate.getTime()) / (24 * 60 * 60 * 1000)));
     };
 
@@ -183,13 +194,14 @@ const Chat = () => {
                                         hideTitle = true;
                                     }
 
-                                    newDay = daysBetween(new Date(message.DateCreated), new Date(messages[index + 1].DateCreated)) > 0;
+                                    newDay =
+                                        daysBetween(new Date(message.DateCreated), new Date(messages[index + 1].DateCreated)) > 0;
                                 }
 
                                 return (
                                     <div>
                                         {newDay && (
-                                            <div class='separator'>
+                                            <div className='separator'>
                                                 {new Date(message.DateCreated).getDate() === new Date().getDate()
                                                     ? 'Today'
                                                     : dateFormat(message.DateCreated, 'fullDate')}
@@ -210,19 +222,20 @@ const Chat = () => {
                     <div className='input d-flex justify-content-center align-items-center w-100 p-3'>
                         <form
                             className='input-group d-flex justify-content-center align-items-center rounded-pill bg-dark-accent w-100 h-100 px-4 mx-4'
-                            onSubmit={messageSend}>
+                            onSubmit={messageSend}
+                        >
                             <input
                                 type='text'
-                                class='form-control'
+                                className='form-control'
                                 placeholder='Enter your message'
-                                aria-label='Message'
+                                aria-label='MessageReducer'
                                 value={chatInput}
                                 onChange={(ev) => {
                                     setChatInput(ev.target.value);
                                 }}
                             />
-                            <div class='input-group-append mx-2'>
-                                <button type='submit' class='btn btn-info' disabled={sendButtonDisabled}>
+                            <div className='input-group-append mx-2'>
+                                <button type='submit' className='btn btn-info' disabled={sendButtonDisabled}>
                                     Send
                                 </button>
                             </div>
@@ -230,7 +243,11 @@ const Chat = () => {
                     </div>
                 </div>
             ) : (
-                <div className={'chat d-flex flex-column justify-content-center align-items-center ' + (user.currentUser ? '' : 'm-0')}>
+                <div
+                    className={
+                        'chat d-flex flex-column justify-content-center align-items-center ' + (user.currentUser ? '' : 'm-0')
+                    }
+                >
                     <div className='text-center app-font prewrap'>
                         <h2>
                             Hello,

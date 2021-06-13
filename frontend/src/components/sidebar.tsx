@@ -11,9 +11,10 @@ import { setMessage, setOnlineUsers, setUser } from '../actions';
 import axios from 'axios';
 import defaultDP from '../assets/profile.png';
 import '../sass/components/_sidebar.scss';
+import { RootState } from '../types';
 
 const SideBar = () => {
-    const user = useSelector((state) => state.userReducer);
+    const user = useSelector((state: RootState) => state.userReducer);
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -45,7 +46,7 @@ const SideBar = () => {
                             onClick={() => {
                                 history.push({
                                     pathname: '/',
-                                    recipient: '',
+                                    state: { recipient: '' },
                                 });
                             }}
                         >
@@ -61,7 +62,7 @@ const SideBar = () => {
                                         width='1.3em'
                                         height='1.3em'
                                         fill='currentColor'
-                                        class='bi bi-chat-fill mb-1 me-2'
+                                        className='bi bi-chat-fill mb-1 me-2'
                                         viewBox='0 0 16 16'
                                     >
                                         <path d='M8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6-.097 1.016-.417 2.13-.771 2.966-.079.186.074.394.273.362 2.256-.37 3.597-.938 4.18-1.234A9.06 9.06 0 0 0 8 15z' />
@@ -76,7 +77,7 @@ const SideBar = () => {
                                         width='1.4em'
                                         height='1.4em'
                                         fill='currentColor'
-                                        class='bi bi-person-circle mb-1 me-2'
+                                        className='bi bi-person-circle mb-1 me-2'
                                         viewBox='0 0 16 16'
                                     >
                                         <path d='M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 0 0 8 15a6.987 6.987 0 0 0 5.468-2.63z' />
@@ -96,7 +97,7 @@ const SideBar = () => {
                                         width='1.4em'
                                         height='1.4em'
                                         fill='currentColor'
-                                        class='bi bi-person-lines-fill mb-1 me-2'
+                                        className='bi bi-person-lines-fill mb-1 me-2'
                                         viewBox='0 0 16 16'
                                     >
                                         <path
@@ -114,7 +115,7 @@ const SideBar = () => {
                                 <Conversations />
                             </Tab.Pane>
                             <Tab.Pane eventKey='contacts'>
-                                <Contacts contactsData={user.currentUser && user.currentUser.Contacts} />
+                                <Contacts />
                             </Tab.Pane>
                             <Tab.Pane eventKey='profile'>
                                 <Profile />

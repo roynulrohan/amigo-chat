@@ -1,19 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUser } from '../actions';
 import '../sass/components/_contacts.scss';
-import defaultDP from '../assets/profile.png';
 import ContactCard from './contact-card';
+import { RootState } from '../types';
 
 const Contacts = () => {
-    const user = useSelector((state) => state.userReducer);
+    const user = useSelector((state: RootState) => state.userReducer);
     const dispatch = useDispatch();
-    const history = useHistory();
-
-    const [contacts, setContacts] = useState([]);
+    const [contacts, setContacts] = useState<Array<string>>([]);
 
     const [addModalShow, setAddModalShow] = useState(false);
     const toggleAddModal = () => {
@@ -36,12 +33,12 @@ const Contacts = () => {
         }
     }, [user]);
 
-    const deleteCallback = (username) => {
+    const deleteCallback = (username: string) => {
         setToDelete(username);
         toggleDeleteModal();
     };
 
-    const deleteContact = (username) => {
+    const deleteContact = (username: string) => {
         // Post request to backend
         axios({
             method: 'put',
@@ -105,10 +102,7 @@ const Contacts = () => {
 
     const addModal = () => {
         return (
-            <Modal
-                show={addModalShow}
-                onClose={toggleAddModal}
-                className='text-dark'>
+            <Modal show={addModalShow} onClose={toggleAddModal} className='text-dark'>
                 <Modal.Header>
                     <Modal.Title>New Contact</Modal.Title>
                 </Modal.Header>
@@ -118,7 +112,8 @@ const Contacts = () => {
                             e.preventDefault();
                             setformError('');
                             addContact();
-                        }}>
+                        }}
+                    >
                         <Form.Group>
                             <Form.Label>Username</Form.Label>
                             <Form.Control
@@ -140,7 +135,8 @@ const Contacts = () => {
                         onClick={() => {
                             setformError('');
                             addContact();
-                        }}>
+                        }}
+                    >
                         Confirm
                     </Button>
                     <Button
@@ -149,7 +145,8 @@ const Contacts = () => {
                             setformUsername('');
                             setformError('');
                             toggleAddModal();
-                        }}>
+                        }}
+                    >
                         Cancel
                     </Button>
                 </Modal.Footer>
@@ -159,10 +156,7 @@ const Contacts = () => {
 
     const deleteModal = () => {
         return (
-            <Modal
-                show={deleteModalShow}
-                onClose={toggleDeleteModal}
-                className='text-dark'>
+            <Modal show={deleteModalShow} onClose={toggleDeleteModal} className='text-dark'>
                 <Modal.Header>
                     <Modal.Title>Deleting Contact</Modal.Title>
                 </Modal.Header>
@@ -176,14 +170,16 @@ const Contacts = () => {
                         variant='danger'
                         onClick={() => {
                             deleteContact(toDelete);
-                        }}>
+                        }}
+                    >
                         Delete
                     </Button>
                     <Button
                         variant='secondary'
                         onClick={() => {
                             toggleDeleteModal();
-                        }}>
+                        }}
+                    >
                         Cancel
                     </Button>
                 </Modal.Footer>
@@ -194,21 +190,13 @@ const Contacts = () => {
     return (
         <div className='contacts'>
             <div className='add-button d-flex align-items-stretch px-5 py-3'>
-                <button
-                    title='New Contact'
-                    className='btn h-100 w-100'
-                    onClick={() => toggleAddModal()}>
+                <button title='New Contact' className='btn h-100 w-100' onClick={() => toggleAddModal()}>
                     New Contact
                 </button>
             </div>
             <div className='list'>
                 {contacts.map((contact) => {
-                    return (
-                        <ContactCard
-                            username={contact}
-                            toDeleteCallback={deleteCallback}
-                        />
-                    );
+                    return <ContactCard username={contact} toDeleteCallback={deleteCallback} />;
                 })}
             </div>
 

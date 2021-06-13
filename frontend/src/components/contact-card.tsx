@@ -4,9 +4,15 @@ import { useHistory } from 'react-router-dom';
 import defaultDP from '../assets/profile.png';
 import { CSSTransition } from 'react-transition-group';
 import { useSelector } from 'react-redux';
+import { RootState } from '../types';
 
-const ContactCard = ({ username, toDeleteCallback }) => {
-    const onlineUsersReducer = useSelector((state) => state.clientsReducer);
+interface Props {
+    username: string;
+    toDeleteCallback: Function;
+}
+
+const ContactCard = ({ username, toDeleteCallback }: Props) => {
+    const onlineUsersReducer = useSelector((state: RootState) => state.clientsReducer);
     const history = useHistory();
     const [onlineStatus, setOnlineStatus] = useState(false);
     const [photoURL, setphotoURL] = useState('');
@@ -21,9 +27,7 @@ const ContactCard = ({ username, toDeleteCallback }) => {
 
     useEffect(() => {
         if (onlineUsersReducer.currentClients) {
-            setOnlineStatus(
-                onlineUsersReducer.currentClients.includes(username)
-            );
+            setOnlineStatus(onlineUsersReducer.currentClients.includes(username));
         }
 
         return () => {
@@ -32,26 +36,14 @@ const ContactCard = ({ username, toDeleteCallback }) => {
     }, [onlineUsersReducer, username]);
 
     return (
-        <CSSTransition
-            in={true}
-            appear={true}
-            timeout={400}
-            classNames='fade'
-            key={'contact-' + username}
-            unmountOnExit>
-            <div
-                key={'contact-' + username}
-                className='contact d-flex justify-content-between align-items-center p-3'>
+        <CSSTransition in={true} appear={true} timeout={400} classNames='fade' key={'contact-' + username} unmountOnExit>
+            <div key={'contact-' + username} className='contact d-flex justify-content-between align-items-center p-3'>
                 <div className='d-flex align-items-center ps-2'>
                     <div className='photo'>
                         <img
-                            className={
-                                'pfp ' +
-                                (onlineStatus
-                                    ? 'ring-indicator-online'
-                                    : 'ring-indicator-offline')
-                            }
-                            src={photoURL ? photoURL : defaultDP}></img>
+                            className={'pfp ' + (onlineStatus ? 'ring-indicator-online' : 'ring-indicator-offline')}
+                            src={photoURL ? photoURL : defaultDP}
+                        ></img>
                     </div>
                     <h5 className='name ps-3'>{username}</h5>
                 </div>
@@ -62,9 +54,10 @@ const ContactCard = ({ username, toDeleteCallback }) => {
                         onClick={() => {
                             history.push({
                                 pathname: '/',
-                                recipient: username.trim(),
+                                state: { recipient: username.trim() },
                             });
-                        }}>
+                        }}
+                    >
                         <svg
                             id='Capa_1'
                             enable-background='new 0 0 465.882 465.882'
@@ -72,7 +65,8 @@ const ContactCard = ({ username, toDeleteCallback }) => {
                             width='1.5em'
                             fill='currentColor'
                             viewBox='0 0 465.882 465.882'
-                            xmlns='http://www.w3.org/2000/svg'>
+                            xmlns='http://www.w3.org/2000/svg'
+                        >
                             <path d='m465.882 0-465.882 262.059 148.887 55.143 229.643-215.29-174.674 235.65.142.053-.174-.053v128.321l83.495-97.41 105.77 39.175z' />
                         </svg>
                     </a>
@@ -81,14 +75,16 @@ const ContactCard = ({ username, toDeleteCallback }) => {
                         title='Delete'
                         onClick={() => {
                             toDeleteCallback(username);
-                        }}>
+                        }}
+                    >
                         <svg
                             xmlns='http://www.w3.org/2000/svg'
                             width='1.4em'
                             height='1.4em'
                             fill='currentColor'
-                            class='bi bi-trash'
-                            viewBox='0 0 16 16'>
+                            className='bi bi-trash'
+                            viewBox='0 0 16 16'
+                        >
                             <path d='M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z' />
                             <path
                                 fill-rule='evenodd'
