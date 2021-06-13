@@ -16,7 +16,7 @@ export function SocketProvider({ id, children }: Params) {
     const [socket, setSocket] = useState<any>();
 
     useEffect(() => {
-        const newSocket = io('http://localhost:4000', {
+        const newSocket = io({
             query: { id },
             timeout: 10001,
             transports: ['websocket'],
