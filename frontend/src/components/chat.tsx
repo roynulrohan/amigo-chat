@@ -23,8 +23,6 @@ const Chat = () => {
     const user = useSelector((state: RootState) => state.userReducer);
     const messageReducer = useSelector((state: RootState) => state.messageReducer);
     const onlineUsersReducer = useSelector((state: RootState) => state.clientsReducer);
-    const dispatch = useDispatch();
-    const location = useLocation<LocationState>();
     const [recipient, setRecipient] = useState('');
     const [recipientStatus, setRecipientStatus] = useState(false);
     const [messages, setMessages] = useState<Array<Message>>([]);
@@ -32,6 +30,8 @@ const Chat = () => {
     const [sendButtonDisabled, setSendButtonDisabled] = useState(false);
     const [conversationCount, setConversationCount] = useState(0);
     const socket: any = useSocket();
+    const dispatch = useDispatch();
+    const location = useLocation<LocationState>();
     const dateFormat = require('dateformat');
 
     useEffect(() => {
@@ -213,7 +213,7 @@ const Chat = () => {
                                             content={message.Content}
                                             date={message.DateCreated}
                                             isMe={user.currentUser.Username === message.Username}
-                                            hideTitle={hideTitle}
+                                            hideTitle={hideTitle && !newDay}
                                         />
                                     </div>
                                 );

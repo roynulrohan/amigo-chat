@@ -17,32 +17,19 @@ const Message = ({ name, content, date, isMe, hideTitle }: Props) => {
         setDateString(dateFormat(date, 'shortTime'));
     }, []);
 
-    return isMe ? (
-        <div
-            className='message d-flex flex-column align-items-end'
-            title={dateFormat(date, 'shortTime') + ' - ' + dateFormat(date, 'longDate')}
-        >
-            {hideTitle ? (
-                <> </>
-            ) : (
-                <small>
-                    <span className='date'>{dateString + ' - '}</span>
-                    <span className='text-info'>You</span>
-                </small>
-            )}
-            <h5 className='m-0'>{content}</h5>
-        </div>
-    ) : (
+    return (
         <div className='message d-flex flex-column' title={dateFormat(date, 'shortTime') + ' - ' + dateFormat(date, 'longDate')}>
-            {hideTitle ? (
+            {hideTitle  ? (
                 <> </>
             ) : (
-                <small>
-                    <span className='name'>{name}</span>
-                    <span className='date'>{' - ' + dateString}</span>
-                </small>
+                <div className='body'>
+                    <small>
+                        <span className={isMe ? 'name' : 'text-info'}>{name}</span>
+                        <span className='date'>{' - ' + dateString}</span>
+                    </small>
+                </div>
             )}
-            <h5 className='m-0'>{content}</h5>
+            <h5 className='m-0 content'>{content}</h5>
         </div>
     );
 };

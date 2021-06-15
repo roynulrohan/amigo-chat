@@ -64,12 +64,15 @@
         color: $text-active;
         margin-left: 3rem;
         margin-right: 3rem;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
         display: flex;
         align-items: center;
         text-align: center;
     }
 
-    .separator::before, .separator::after {
+    .separator::before,
+    .separator::after {
         content: '';
         flex: 1;
         border-bottom: 3px solid $darkest;
@@ -78,7 +81,7 @@
     .separator::before {
         margin-right: 1rem;
     }
-    
+
     .separator::after {
         margin-left: 1rem;
     }
