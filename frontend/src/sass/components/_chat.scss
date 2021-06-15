@@ -35,14 +35,25 @@
     .input {
         grid-area: input;
 
-        input,
-        input:focus {
-            font-size: 18px;
+        textarea,
+        textarea:focus {
+            resize: none;
+            font-size: 1em;
             color: $text;
             background-color: $dark-accent;
             border: none !important;
             outline: none !important;
             box-shadow: none !important;
+        }
+
+        textarea::-webkit-scrollbar {
+            width: 10px;
+            background-color: $dark;
+        }
+
+        textarea::-webkit-scrollbar-thumb {
+            background-color: $theme;
+            border-radius: 50rem;
         }
 
         button {

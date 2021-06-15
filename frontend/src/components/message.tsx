@@ -20,7 +20,7 @@ const Message = ({ name, content, date, isMe, hideTitle, photoURL }: Props) => {
 
     return (
         <div
-            className={'message d-flex align-items-center' + (hideTitle ? ' pt-0' : '')}
+            className={'message d-flex align-items-start' + (hideTitle ? ' pt-0' : '')}
             title={dateFormat(date, 'shortTime') + ' - ' + dateFormat(date, 'longDate')}
         >
             {hideTitle ? (

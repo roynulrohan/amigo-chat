@@ -250,8 +250,8 @@ const Chat = ({ windowWidth }: Props) => {
                             className='input-group d-flex justify-content-center align-items-center rounded-pill bg-dark-accent w-100 h-100 px-3 mx-4'
                             onSubmit={messageSend}
                         >
-                            <input
-                                type='text'
+                            <textarea
+                                
                                 className='form-control'
                                 placeholder='Enter your message'
                                 aria-label='MessageReducer'
