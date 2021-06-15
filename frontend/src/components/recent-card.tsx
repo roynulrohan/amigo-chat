@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import axios from 'axios';
 import defaultDP from '../assets/profile.png';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../types';
+import { RootState, LocationState } from '../types';
 import { setSidebar } from '../actions';
 interface Props {
     conversation: Conversation;
@@ -25,6 +25,7 @@ const RecentCard = ({ conversation }: Props) => {
     const [timeString, setTimeString] = useState('');
     const [dateString, setDateString] = useState('');
     const history = useHistory();
+    const location = useLocation<LocationState>();
     const dispatch = useDispatch();
     const dateFormat = require('dateformat');
 
@@ -69,10 +70,19 @@ const RecentCard = ({ conversation }: Props) => {
                 className='conversation d-flex p-3'
                 onClick={() => {
                     dispatch(setSidebar());
-                    history.push({
-                        pathname: '/',
-                        state: { recipient: conversation.recipient.trim() },
-                    });
+                    if (location?.state?.recipient) {
+                        if (location?.state?.recipient !== conversation.recipient.trim()) {
+                            history.push({
+                                pathname: '/',
+                                state: { recipient: conversation.recipient.trim() },
+                            });
+                        }
+                    } else {
+                        history.push({
+                            pathname: '/',
+                            state: { recipient: conversation.recipient.trim() },
+                        });
+                    }
                 }}
             >
                 <div className='photo position-relative'>

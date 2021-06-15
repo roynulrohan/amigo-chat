@@ -7,6 +7,8 @@ const UserSession = require('../models/UserSession');
 router.route('/getPhoto').get(function (req, res, next) {
     const { query } = req;
     const { username } = query;
+    
+    if (!username) return;
 
     User.findOne(
         {
@@ -68,72 +70,56 @@ router.route('/update').put(function (req, res) {
                 } else if (previousUsers.length == 0) {
                     return res.send({
                         success: false,
-                        message:
-                            'User not found. Make sure name is case sensitive.',
+                        message: 'User not found. Make sure name is case sensitive.',
                     });
                 }
 
-                User.findOneAndUpdate(
-                    { Username: username },
-                    params,
-                    { new: true, upsert: true },
-                    function (err, result) {
-                        if (err) {
-                            console.log(err);
-                            res.send({
-                                success: false,
-                                message: 'Server error.',
-                            });
-                        } else {
-                            res.send({
-                                success: true,
-                                result: result,
-                            });
-                        }
+                User.findOneAndUpdate({ Username: username }, params, { new: true, upsert: true }, function (err, result) {
+                    if (err) {
+                        console.log(err);
+                        res.send({
+                            success: false,
+                            message: 'Server error.',
+                        });
+                    } else {
+                        res.send({
+                            success: true,
+                            result: result,
+                        });
                     }
-                );
+                });
             }
         );
     } else if (deleteContact) {
-        User.findOneAndUpdate(
-            { Username: username },
-            params,
-            { new: true, upsert: true },
-            function (err, result) {
-                if (err) {
-                    console.log(err);
-                    res.send({
-                        success: false,
-                        message: 'Server error.',
-                    });
-                } else {
-                    res.send({
-                        success: true,
-                        result: result,
-                    });
-                }
+        User.findOneAndUpdate({ Username: username }, params, { new: true, upsert: true }, function (err, result) {
+            if (err) {
+                console.log(err);
+                res.send({
+                    success: false,
+                    message: 'Server error.',
+                });
+            } else {
+                res.send({
+                    success: true,
+                    result: result,
+                });
             }
-        );
+        });
     } else if (photoURL) {
-        User.findOneAndUpdate(
-            { Username: username },
-            params,
-            { new: true, upsert: true },
-            function (err, result) {
-                if (err) {
-                    console.log(err);
-                    res.send({
-                        success: false,
-                        message: 'Server error.',
-                    });
-                } else {
-                    res.send({
-                        success: true,
-                        result: result,
-                    });
-                }
+        User.findOneAndUpdate({ Username: username }, params, { new: true, upsert: true }, function (err, result) {
+            if (err) {
+                console.log(err);
+                res.send({
+                    success: false,
+                    message: 'Server error.',
+                });
+            } else {
+                res.send({
+                    success: true,
+                    result: result,
+                });
             }
-        );
+        });
     }
 });
 

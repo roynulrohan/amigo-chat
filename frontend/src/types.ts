@@ -33,3 +33,7 @@ export interface Clients {
 export interface SidebarReducer {
     isCollapsed: boolean;
 }
+
+export type LocationState = {
+    recipient: string;
+};

@@ -7,9 +7,10 @@ interface Props {
     date: Date;
     isMe: boolean;
     hideTitle: boolean;
+    photoURL?: any;
 }
 
-const Message = ({ name, content, date, isMe, hideTitle }: Props) => {
+const Message = ({ name, content, date, isMe, hideTitle, photoURL }: Props) => {
     const [dateString, setDateString] = useState('');
     const dateFormat = require('dateformat');
 
@@ -18,18 +19,28 @@ const Message = ({ name, content, date, isMe, hideTitle }: Props) => {
     }, []);
 
     return (
-        <div className='message d-flex flex-column' title={dateFormat(date, 'shortTime') + ' - ' + dateFormat(date, 'longDate')}>
+        <div
+            className={'message d-flex align-items-center' + (hideTitle ? ' pt-0' : '')}
+            title={dateFormat(date, 'shortTime') + ' - ' + dateFormat(date, 'longDate')}
+        >
             {hideTitle ? (
                 <> </>
             ) : (
-                <div className='body'>
+                <div className='photo'>
+                    <img className='pfp' src={photoURL} />
+                </div>
+            )}
+            <div className='d-flex flex-column body'>
+                {hideTitle ? (
+                    <> </>
+                ) : (
                     <small>
                         <span className={isMe ? 'name' : 'text-info'}>{name}</span>
                         <span className='date'>{' - ' + dateString}</span>
                     </small>
-                </div>
-            )}
-            <h5 className='m-0 content'>{content}</h5>
+                )}
+                <h5 className='m-0 content'>{content}</h5>
+            </div>
         </div>
     );
 };

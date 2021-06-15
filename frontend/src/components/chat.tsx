@@ -7,12 +7,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { setMessage } from '../actions';
-import { RootState } from '../types';
+import { RootState, LocationState } from '../types';
 import Hamburger from './hamburger';
-
-type LocationState = {
-    recipient: string;
-};
+import defaultDP from '../assets/profile.png';
 
 interface Message {
     Username: string;
@@ -29,6 +26,7 @@ const Chat = ({ windowWidth }: Props) => {
     const onlineUsersReducer = useSelector((state: RootState) => state.clientsReducer);
     const [recipient, setRecipient] = useState('');
     const [recipientStatus, setRecipientStatus] = useState(false);
+    const [recipientPhoto, setRecipientPhoto] = useState(undefined);
     const [messages, setMessages] = useState<Array<Message>>([]);
     const [chatInput, setChatInput] = useState('');
     const [sendButtonDisabled, setSendButtonDisabled] = useState(false);
@@ -87,6 +85,18 @@ const Chat = ({ windowWidth }: Props) => {
     useEffect(() => {
         if (location) {
             setRecipient(location.state?.recipient);
+
+            if (location.state?.recipient) {
+                axios.get('/user/getPhoto?username=' + location.state?.recipient).then((res) => {
+                    if (res.data.success) {
+                        setRecipientPhoto(res.data.result);
+                    }
+                });
+
+                return () => {
+                    setRecipientPhoto(undefined);
+                };
+            }
         }
     }, [location]);
 
@@ -220,6 +230,15 @@ const Chat = ({ windowWidth }: Props) => {
                                             content={message.Content}
                                             date={message.DateCreated}
                                             isMe={user.currentUser.Username === message.Username}
+                                            photoURL={
+                                                user.currentUser.Username === message.Username
+                                                    ? user.currentUser.PhotoURL
+                                                        ? user.currentUser.PhotoURL
+                                                        : defaultDP
+                                                    : recipientPhoto
+                                                    ? recipientPhoto
+                                                    : defaultDP
+                                            }
                                             hideTitle={hideTitle && !newDay}
                                         />
                                     </div>
