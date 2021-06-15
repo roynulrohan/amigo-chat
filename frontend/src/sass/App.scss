@@ -44,12 +44,24 @@ body {
     width: 100% !important;
 }
 
-.ring-indicator-online {
-    box-shadow: 0px 0px 1px 4px rgb(6, 167, 0);
+.indicator-online {
+    position: absolute;
+    bottom: 0;
+    right: 0.1rem;
+    border-radius: 100%;
+    width: 0.8rem;
+    height: 0.8rem;
+    background: rgb(6, 167, 0);
 }
 
-.ring-indicator-offline {
-    box-shadow: 0px 0px 1px 4px rgb(182, 41, 65);
+.indicator-offline {
+    position: absolute;
+    bottom: 0;
+    right: 0.1rem;
+    border-radius: 100%;
+    width: 0.8rem;
+    height: 0.8rem;
+    background: rgb(182, 41, 65);
 }
 
 // PRESETS

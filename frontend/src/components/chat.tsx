@@ -255,7 +255,7 @@ const Chat = ({ windowWidth }: Props) => {
                         'chat d-flex flex-column justify-content-center align-items-center ' + (user.currentUser ? '' : 'm-0')
                     }
                 >
-                    <div className='position-absolute top-0 w-100 p-4'>
+                    <div className={'position-absolute p-4' + (windowWidth < 1200 ? ' w-100 top-0' : '')}>
                         <Hamburger windowWidth={windowWidth} />
                     </div>
                     <div className='text-center app-font prewrap'>

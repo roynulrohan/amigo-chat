@@ -75,11 +75,9 @@ const RecentCard = ({ conversation }: Props) => {
                     });
                 }}
             >
-                <div className='photo'>
-                    <img
-                        className={'pfp ' + (onlineStatus ? 'ring-indicator-online' : 'ring-indicator-offline')}
-                        src={photoURL ? photoURL : defaultDP}
-                    />
+                <div className='photo position-relative'>
+                    <img className='pfp ' src={photoURL ? photoURL : defaultDP} />
+                    <span className={onlineStatus ? 'indicator-online' : 'indicator-offline'}></span>
                 </div>
                 <div className='ms-3 mb-1 flex-grow-1'>
                     <div className='d-flex justify-content-between'>
