@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Chat from './chat';
 import SideBar from './sidebar';
 import { useSocket } from '../contexts/SocketProvider';
@@ -14,6 +14,15 @@ const Main = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const socket: any = useSocket();
+    const [windowWidth, setWindowWidth] = useState(1200);
+
+    useEffect(
+        () =>
+            (window.onresize = () => {
+                setWindowWidth(window.innerWidth);
+            }),
+        []
+    );
 
     useEffect(() => {
         if (user.currentUser) {
@@ -44,9 +53,9 @@ const Main = () => {
         <CSSTransition in={true} appear={true} timeout={400} classNames='fade' unmountOnExit>
             {user.currentUser !== undefined ? (
                 user.currentUser ? (
-                    <div>
-                        <SideBar />
-                        <Chat />
+                    <div className='d-flex'>
+                        <SideBar windowWidth={windowWidth} />
+                        <Chat windowWidth={windowWidth} />
                     </div>
                 ) : (
                     <></>

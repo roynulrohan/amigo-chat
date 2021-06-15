@@ -2,6 +2,7 @@ export interface RootState {
     userReducer: User;
     messageReducer: MessageReducer;
     clientsReducer: Clients;
+    sidebarReducer: SidebarReducer;
 }
 
 export interface User {
@@ -27,4 +28,8 @@ export interface CurrentMessage {
 
 export interface Clients {
     currentClients: Array<Object>;
+}
+
+export interface SidebarReducer {
+    isCollapsed: boolean;
 }

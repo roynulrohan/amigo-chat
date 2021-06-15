@@ -8,6 +8,7 @@ import { useLocation, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { setMessage } from '../actions';
 import { RootState } from '../types';
+import Hamburger from './hamburger';
 
 type LocationState = {
     recipient: string;
@@ -18,8 +19,11 @@ interface Message {
     Content: string;
     DateCreated: Date;
 }
+interface Props {
+    windowWidth: number;
+}
 
-const Chat = () => {
+const Chat = ({ windowWidth }: Props) => {
     const user = useSelector((state: RootState) => state.userReducer);
     const messageReducer = useSelector((state: RootState) => state.messageReducer);
     const onlineUsersReducer = useSelector((state: RootState) => state.clientsReducer);
@@ -169,10 +173,13 @@ const Chat = () => {
     };
 
     return (
-        <CSSTransition in={true} appear={true} timeout={600} classNames='fade' unmountOnExit key={recipient}>
+        <CSSTransition in={true} appear={true} timeout={600} classNames='fade' unmountOnExit>
             {recipient && user.currentUser ? (
                 <div className='chat h-100'>
-                    <div className='header d-flex justify-content-center align-items-center w-100 p-3'>
+                    <div className='header d-flex justify-content-center align-items-center w-100 p-3 position-relative'>
+                        <div className='position-absolute top-0 w-100 p-4'>
+                            <Hamburger windowWidth={windowWidth} />
+                        </div>
                         <h2 className='m-0'>
                             <span className='d-flex justify-content-center align-items-center badge rounded-pill bg-dark-accent'>
                                 <span>{recipient}</span>
@@ -183,7 +190,7 @@ const Chat = () => {
                             </span>
                         </h2>
                     </div>
-                    <div className='conversation d-flex flex-column-reverse px-4 py-2'>
+                    <div className='conversation d-flex flex-column-reverse py-2'>
                         {messages &&
                             messages.map((message, index) => {
                                 let hideTitle = false;
@@ -219,9 +226,9 @@ const Chat = () => {
                                 );
                             })}
                     </div>
-                    <div className='input d-flex justify-content-center align-items-center w-100 p-3'>
+                    <div className='input d-flex justify-content-center align-items-center w-100 py-3'>
                         <form
-                            className='input-group d-flex justify-content-center align-items-center rounded-pill bg-dark-accent w-100 h-100 px-4 mx-4'
+                            className='input-group d-flex justify-content-center align-items-center rounded-pill bg-dark-accent w-100 h-100 px-3 mx-4'
                             onSubmit={messageSend}
                         >
                             <input
@@ -248,6 +255,9 @@ const Chat = () => {
                         'chat d-flex flex-column justify-content-center align-items-center ' + (user.currentUser ? '' : 'm-0')
                     }
                 >
+                    <div className='position-absolute top-0 w-100 p-4'>
+                        <Hamburger windowWidth={windowWidth} />
+                    </div>
                     <div className='text-center app-font prewrap'>
                         <h2>
                             Hello,

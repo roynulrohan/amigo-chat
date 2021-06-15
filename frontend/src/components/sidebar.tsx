@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Nav, Tab } from 'react-bootstrap';
 import Contacts from './contacts';
@@ -7,13 +7,18 @@ import Profile from './profile';
 import { CSSTransition } from 'react-transition-group';
 import { getFromStorage } from '../utils/storage';
 import { useSelector, useDispatch } from 'react-redux';
-import { setMessage, setOnlineUsers, setUser } from '../actions';
+import { setMessage, setOnlineUsers, setUser, setSidebar } from '../actions';
 import axios from 'axios';
 import defaultDP from '../assets/profile.png';
 import '../sass/components/_sidebar.scss';
 import { RootState } from '../types';
 
-const SideBar = () => {
+interface Props {
+    windowWidth: number;
+}
+
+const SideBar = ({ windowWidth }: Props) => {
+    const visibility = useSelector((state: RootState) => state.sidebarReducer);
     const user = useSelector((state: RootState) => state.userReducer);
     const dispatch = useDispatch();
     const history = useHistory();
@@ -30,6 +35,7 @@ const SideBar = () => {
                     dispatch(setUser());
                     dispatch(setMessage());
                     dispatch(setOnlineUsers());
+                    dispatch(setSidebar());
                     history.push('/login');
                 }
             });
@@ -39,7 +45,7 @@ const SideBar = () => {
     return (
         <CSSTransition in={true} appear={true} timeout={400} classNames='fade' unmountOnExit>
             {user.currentUser ? (
-                <div className='sidebar'>
+                <div className={'sidebar ' + (windowWidth < 1200 ? 'hidden' : '') + (visibility.isCollapsed ? ' collapsed' : '')}>
                     <div className='header bg-dark-accent unselectable w-100 p-3'>
                         <h2
                             className='app-title pointer m-0'

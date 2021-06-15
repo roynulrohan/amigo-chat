@@ -4,9 +4,9 @@ import { useHistory } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import axios from 'axios';
 import defaultDP from '../assets/profile.png';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../types';
-
+import { setSidebar } from '../actions';
 interface Props {
     conversation: Conversation;
 }
@@ -20,10 +20,12 @@ interface Conversation {
 const RecentCard = ({ conversation }: Props) => {
     const onlineUsersReducer = useSelector((state: RootState) => state.clientsReducer);
     const [photoURL, setphotoURL] = useState('');
-    const history = useHistory();
+
     const [onlineStatus, setOnlineStatus] = useState(false);
     const [timeString, setTimeString] = useState('');
     const [dateString, setDateString] = useState('');
+    const history = useHistory();
+    const dispatch = useDispatch();
     const dateFormat = require('dateformat');
 
     useEffect(() => {
@@ -66,6 +68,7 @@ const RecentCard = ({ conversation }: Props) => {
                 title={'Open Conversation'}
                 className='conversation d-flex p-3'
                 onClick={() => {
+                    dispatch(setSidebar());
                     history.push({
                         pathname: '/',
                         state: { recipient: conversation.recipient.trim() },

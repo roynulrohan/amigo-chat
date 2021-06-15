@@ -19,7 +19,7 @@ const Message = ({ name, content, date, isMe, hideTitle }: Props) => {
 
     return (
         <div className='message d-flex flex-column' title={dateFormat(date, 'shortTime') + ' - ' + dateFormat(date, 'longDate')}>
-            {hideTitle  ? (
+            {hideTitle ? (
                 <> </>
             ) : (
                 <div className='body'>
