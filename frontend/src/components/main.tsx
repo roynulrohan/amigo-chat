@@ -16,6 +16,10 @@ const Main = () => {
     const socket: any = useSocket();
     const [windowWidth, setWindowWidth] = useState(1200);
 
+    useEffect(() => {
+        setWindowWidth(window.innerWidth);
+    }, []);
+
     useEffect(
         () =>
             (window.onresize = () => {

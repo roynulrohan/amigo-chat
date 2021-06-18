@@ -125,56 +125,58 @@ const Chat = ({ windowWidth }: Props) => {
         return () => socket && socket.off('recieve-message');
     }, [messageReducer]);
 
-    const messageSend = (e: React.FormEvent) => {
-        e.preventDefault();
+    const messageSend = (e: React.KeyboardEvent) => {
+        if (e.keyCode == 13 && e.shiftKey == false) {
+            e.preventDefault();
 
-        if (chatInput) {
-            setMessages((messages) => [
-                {
-                    Username: user.currentUser.Username,
-                    Content: chatInput,
-                    DateCreated: new Date(),
-                },
-                ...messages,
-            ]);
-
-            socket.emit('send-message', {
-                recipient: recipient,
-                message: chatInput,
-                date: Date.now(),
-            });
-
-            dispatch(
-                setMessage({
-                    sender: recipient,
-                    content: chatInput,
-                    date: Date.now(),
-                    isMe: true,
-                })
-            );
-
-            setSendButtonDisabled(true);
-            axios({
-                method: 'post',
-                url: '/message/update',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                data: JSON.stringify({
-                    Users: [user.currentUser.Username, recipient],
-                    message: {
+            if (chatInput) {
+                setMessages((messages) => [
+                    {
                         Username: user.currentUser.Username,
                         Content: chatInput,
-                        DateCreated: Date.now(),
+                        DateCreated: new Date(),
                     },
-                }),
-            }).then((res) => {
-                setTimeout(() => {
-                    setSendButtonDisabled(false);
-                }, 500);
-            });
+                    ...messages,
+                ]);
 
-            setChatInput('');
+                socket.emit('send-message', {
+                    recipient: recipient,
+                    message: chatInput,
+                    date: Date.now(),
+                });
+
+                dispatch(
+                    setMessage({
+                        sender: recipient,
+                        content: chatInput,
+                        date: Date.now(),
+                        isMe: true,
+                    })
+                );
+
+                setSendButtonDisabled(true);
+                axios({
+                    method: 'post',
+                    url: '/message/update',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    data: JSON.stringify({
+                        Users: [user.currentUser.Username, recipient],
+                        message: {
+                            Username: user.currentUser.Username,
+                            Content: chatInput,
+                            DateCreated: Date.now(),
+                        },
+                    }),
+                }).then((res) => {
+                    setTimeout(() => {
+                        setSendButtonDisabled(false);
+                    }, 500);
+                });
+
+                setChatInput('');
+            }
         }
     };
 
@@ -248,16 +250,18 @@ const Chat = ({ windowWidth }: Props) => {
                     <div className='input d-flex justify-content-center align-items-center w-100 py-3'>
                         <form
                             className='input-group d-flex justify-content-center align-items-center rounded-pill bg-dark-accent w-100 h-100 px-3 mx-4'
-                            onSubmit={messageSend}
+                            //onSubmit={messageSend}
                         >
                             <textarea
-                                
                                 className='form-control'
                                 placeholder='Enter your message'
                                 aria-label='MessageReducer'
                                 value={chatInput}
                                 onChange={(ev) => {
                                     setChatInput(ev.target.value);
+                                }}
+                                onKeyDown={(ev) => {
+                                    messageSend(ev);
                                 }}
                             />
                             <div className='input-group-append mx-2'>
