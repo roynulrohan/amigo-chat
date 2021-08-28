@@ -37,8 +37,9 @@
 
         textarea,
         textarea:focus {
+            vertical-align: middle;
             resize: none;
-            font-size: 1em;
+            font-size: 1.1em;
             color: $text;
             background-color: $dark-accent;
             border: none !important;

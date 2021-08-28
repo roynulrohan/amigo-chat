@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import Chat from './chat';
-import SideBar from './sidebar';
+import Chat from '../components/chat';
+import SideBar from '../components/sidebar';
 import { useSocket } from '../contexts/SocketProvider';
 import { useSelector, useDispatch } from 'react-redux';
 import { setMessage, setOnlineUsers } from '../actions';
@@ -98,8 +98,7 @@ const Main = () => {
                                 className='btn btn-info'
                                 onClick={() => {
                                     history.push('/login');
-                                }}
-                            >
+                                }}>
                                 Continue
                             </button>
                         </div>

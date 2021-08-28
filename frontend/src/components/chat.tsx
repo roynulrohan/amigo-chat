@@ -213,8 +213,7 @@ const Chat = ({ windowWidth }: Props) => {
                                         hideTitle = true;
                                     }
 
-                                    newDay =
-                                        daysBetween(new Date(message.DateCreated), new Date(messages[index + 1].DateCreated)) > 0;
+                                    newDay = daysBetween(new Date(message.DateCreated), new Date(messages[index + 1].DateCreated)) > 0;
                                 }
 
                                 return (
@@ -253,8 +252,9 @@ const Chat = ({ windowWidth }: Props) => {
                             //onSubmit={messageSend}
                         >
                             <textarea
+                                rows={1}
                                 className='form-control'
-                                placeholder='Enter your message'
+                                placeholder={'Message ' + recipient}
                                 aria-label='MessageReducer'
                                 value={chatInput}
                                 onChange={(ev) => {
@@ -273,11 +273,7 @@ const Chat = ({ windowWidth }: Props) => {
                     </div>
                 </div>
             ) : (
-                <div
-                    className={
-                        'chat d-flex flex-column justify-content-center align-items-center ' + (user.currentUser ? '' : 'm-0')
-                    }
-                >
+                <div className={'chat d-flex flex-column justify-content-center align-items-center ' + (user.currentUser ? '' : 'm-0')}>
                     <div className={'position-absolute p-4' + (windowWidth < 1200 ? ' w-100 top-0' : '')}>
                         <Hamburger windowWidth={windowWidth} />
                     </div>

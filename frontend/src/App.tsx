@@ -5,8 +5,8 @@ import { getFromStorage } from './utils/storage';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUser } from './actions';
 import axios from 'axios';
-import Main from './components/main';
-import Login from './components/login';
+import Main from './pages/main';
+import Login from './pages/login';
 import './sass/App.scss';
 import { RootState, User } from './types';
 
