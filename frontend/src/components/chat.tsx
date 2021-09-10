@@ -129,7 +129,7 @@ const Chat = ({ windowWidth }: Props) => {
         if (e.keyCode == 13 && e.shiftKey == false) {
             e.preventDefault();
 
-            if (chatInput) {
+            if (chatInput.trim()) {
                 setMessages((messages) => [
                     {
                         Username: user.currentUser.Username,
@@ -265,7 +265,7 @@ const Chat = ({ windowWidth }: Props) => {
                                 }}
                             />
                             <div className='input-group-append mx-2'>
-                                <button type='submit' className='btn btn-info' disabled={sendButtonDisabled}>
+                                <button type='submit' className='btn btn-info' disabled={sendButtonDisabled || (chatInput.trim() === '')}>
                                     Send
                                 </button>
                             </div>
